@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <!-- 모바일 상단 노치 및 하단 홈 바 영역까지 흰색으로 동기화 -->
   <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>YUNG</title>
@@ -89,12 +88,6 @@
       pointer-events: auto;
     }
 
-    /* 자연스럽게 스며드는 텍스트 블렌드 효과 */
-    .blend-hero-logo {
-      mix-blend-mode: overlay;
-      text-shadow: 0 15px 35px rgba(0,0,0,0.25);
-    }
-
     /* 3. 히든 네비게이션 트랜지션 */
     .nav-fade-target {
       opacity: 0;
@@ -133,7 +126,7 @@
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
 
-  <!-- 1. Intro Splash Screen (모바일 사파리 하단 바까지 완전 차단) -->
+  <!-- 1. Intro Splash Screen -->
   <div id="splash-screen" class="pointer-events-none">
     <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
       YUNG
@@ -183,14 +176,11 @@
 
     </div>
 
-    <!-- 숨겨졌을 때 표시되는 미세 가이드 라인 -->
     <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
   </header>
 
-  <!-- 2-1. [모바일] Full-Screen Navigation Drawer (기존 메뉴 폰트 적용) -->
+  <!-- 2-1. [모바일] Full-Screen Navigation Drawer -->
   <div id="mobile-drawer" class="fixed inset-0 w-full h-[100dvh] z-[9999] bg-black/95 backdrop-blur-2xl text-white flex flex-col justify-between p-8 sm:p-12 md:hidden">
-    
-    <!-- Drawer Top -->
     <div class="flex items-center justify-between">
       <span class="font-display text-2xl font-black tracking-[-0.07em]">YUNG</span>
       <button id="drawer-close-btn" aria-label="Close Menu" class="p-2 text-white/80 hover:text-white">
@@ -200,7 +190,6 @@
       </button>
     </div>
 
-    <!-- Drawer Links (기존 메뉴 폰트: Plus Jakarta Sans / Bold / Uppercase) -->
     <nav class="flex flex-col space-y-7 my-auto">
       <a href="#collections" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Archive</a>
       <a href="#collections" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Object</a>
@@ -209,7 +198,6 @@
       <a href="#" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Search</a>
     </nav>
 
-    <!-- Drawer Bottom -->
     <div class="flex justify-between items-center pt-6 border-t border-white/10 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400">
       <a href="#" class="hover:text-white transition-colors">Instagram</a>
       <span>© 2026 YUNG</span>
@@ -219,7 +207,7 @@
   <!-- 3. Full-Screen Hero Visual Section (100dvh) -->
   <section id="hero-section" class="relative w-full h-[100dvh] min-h-[480px] overflow-hidden flex items-center justify-center select-none bg-black">
     
-    <!-- Crossfade Image Container -->
+    <!-- Crossfade Image Container (기본 커서 유지) -->
     <div id="hero-image-container" class="absolute inset-0 w-full h-full">
       
       <!-- Slide 1 -->
@@ -381,9 +369,10 @@
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // 히어로 슬라이더 (4초)
+    // 히어로 슬라이더
     const layers = document.querySelectorAll('.hero-bg-layer');
     const dots = document.querySelectorAll('.slide-dot');
+    const heroContainer = document.getElementById('hero-image-container');
     let currentSlide = 0;
     const totalSlides = layers.length;
     const slideDuration = 4000;
@@ -416,9 +405,19 @@
 
     resetTimer();
 
+    // 메인 이미지 클릭 시 슬라이드 전환 (기본 커서 상태 유지)
+    if (heroContainer) {
+      heroContainer.addEventListener('click', () => {
+        nextSlide();
+        resetTimer();
+      });
+    }
+
+    // 인디케이터 클릭 이벤트
     dots.forEach((dot, index) => {
       dot.style.cursor = 'pointer';
-      dot.addEventListener('click', () => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
         goToSlide(index);
         resetTimer();
       });
