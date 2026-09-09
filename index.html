@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>YUNG</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,17 +19,17 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* 인트로 스플래시 애니메이션 */
+    /* 인트로 스플래시 애니메이션 (모바일 뷰포트 빈틈 완벽 차단) */
     @keyframes splashSequence {
       0% { opacity: 1; visibility: visible; }
-      70% { opacity: 1; visibility: visible; }
+      75% { opacity: 1; visibility: visible; }
       100% { opacity: 0; visibility: hidden; }
     }
     @keyframes logoZoom {
       0% { transform: scale(0.95); opacity: 0; }
       25% { transform: scale(1); opacity: 1; }
       75% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.05); opacity: 0; }
+      100% { transform: scale(1.04); opacity: 0; }
     }
     #splash-screen {
       animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -38,15 +38,15 @@
       animation: logoZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* 메인 풀스크린 크로스페이드 레이어 & 미세 줌 효과 */
+    /* 메인 풀스크린 크로스페이드 레이어 & 전환 속도 최적화 */
     .hero-bg-layer {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       opacity: 0;
-      transform: scale(1.06);
-      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
+      transform: scale(1.05);
+      transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
       will-change: opacity, transform;
       pointer-events: none;
     }
@@ -69,11 +69,11 @@
       text-shadow: 0 15px 35px rgba(0,0,0,0.25);
     }
 
-    /* 히든 네비게이션 트랜지션 (스크롤/호버 상태 제어) */
+    /* 히든 네비게이션 트랜지션 */
     .nav-fade-target {
       opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(-6px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
     }
     header:hover .nav-fade-target,
@@ -91,19 +91,19 @@
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
 
-  <!-- 1. Intro Splash Screen (흰 바탕 + 검정 로고) -->
-  <div id="splash-screen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white pointer-events-none">
-    <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
+  <!-- 1. Intro Splash Screen (모바일 100dvh 풀스크린 적용으로 여백 제거) -->
+  <div id="splash-screen" class="fixed inset-0 w-full h-[100dvh] z-[9999] flex items-center justify-center bg-white pointer-events-none">
+    <div id="splash-logo" class="font-display text-5xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
       YUNG
     </div>
   </div>
 
-  <!-- 2. Transparent Header (초기 접속 시 표시 / 스크롤 방향에 따라 자동 전환) -->
-  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-6 sm:py-8 select-none transition-all duration-300">
-    <div class="max-w-[1700px] mx-auto px-5 sm:px-12 flex items-center justify-between">
+  <!-- 2. Responsive Transparent Header (모바일 맞춤 간격 및 폰트 축소 적용) -->
+  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-4 sm:py-8 select-none transition-all duration-300">
+    <div class="max-w-[1700px] mx-auto px-4 sm:px-12 flex items-center justify-between">
       
       <!-- Left Menu Links -->
-      <nav class="nav-fade-target flex items-center space-x-6 sm:space-x-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white/80 flex-1">
+      <nav class="nav-fade-target flex items-center space-x-3.5 sm:space-x-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/80 flex-1">
         <a href="#collections" class="hover:text-white transition-colors duration-200">Archive</a>
         <a href="#collections" class="hover:text-white transition-colors duration-200">Object</a>
         <a href="#collections" class="hidden sm:inline-block hover:text-white transition-colors duration-200">Exhibition</a>
@@ -111,13 +111,13 @@
 
       <!-- Center Mini Logo -->
       <div class="nav-fade-target flex justify-center items-center">
-        <a href="#" class="font-display text-xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
+        <a href="#" class="font-display text-lg sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
           YUNG
         </a>
       </div>
 
       <!-- Right Utility Actions -->
-      <div class="nav-fade-target flex items-center justify-end space-x-5 sm:space-x-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white/80 flex-1">
+      <div class="nav-fade-target flex items-center justify-end space-x-3.5 sm:space-x-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/80 flex-1">
         <button class="hidden sm:inline-block hover:text-white transition-colors duration-200">Search</button>
         <a href="#" class="hidden md:inline-block hover:text-white transition-colors duration-200">About</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Bag (0)</a>
@@ -126,18 +126,17 @@
     </div>
 
     <!-- 숨겨졌을 때 표시되는 상단 미세 가이드 라인 -->
-    <div class="nav-guide-line absolute top-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
+    <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
   </header>
 
   <!-- 3. Full-Screen Hero Visual Section (모바일 100dvh 지원) -->
-  <section id="hero-section" class="relative w-full h-[100dvh] min-h-[500px] overflow-hidden flex items-center justify-center select-none bg-black">
+  <section id="hero-section" class="relative w-full h-[100dvh] min-h-[480px] overflow-hidden flex items-center justify-center select-none bg-black">
     
-    <!-- Crossfade Image Container (PC/모바일 반응형 picture 분기) -->
+    <!-- Crossfade Image Container -->
     <div id="hero-image-container" class="absolute inset-0 w-full h-full">
       
       <!-- Slide 1 -->
       <picture class="hero-bg-layer active">
-        <!-- 모바일 전용 세로 이미지 (필요시 모바일용 파일명 지정, 없을 경우 동일 이미지 사용 가능) -->
         <source media="(max-width: 768px)" srcset="풀스크린_no-watermark.png" />
         <img src="풀스크린_no-watermark.png" alt="Artwork 01" />
       </picture>
@@ -160,72 +159,72 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
 
     <!-- 하단 상태 인디케이터 슬라이드 바 -->
-    <div class="absolute bottom-8 sm:bottom-10 z-20 flex items-center gap-3">
-      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white transition-all duration-500"></div>
-      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
-      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
+    <div class="absolute bottom-6 sm:bottom-10 z-20 flex items-center gap-2 sm:gap-3">
+      <div class="slide-dot w-6 sm:w-8 h-[2px] bg-white transition-all duration-300"></div>
+      <div class="slide-dot w-6 sm:w-8 h-[2px] bg-white/30 transition-all duration-300"></div>
+      <div class="slide-dot w-6 sm:w-8 h-[2px] bg-white/30 transition-all duration-300"></div>
     </div>
   </section>
 
   <!-- 4. Curated Collection Section -->
-  <section id="collections" class="py-24 sm:py-28 bg-[#fafafa] text-neutral-900">
-    <div class="max-w-[1600px] mx-auto px-6 sm:px-12">
+  <section id="collections" class="py-20 sm:py-28 bg-[#fafafa] text-neutral-900">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-12">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-neutral-200">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 pb-6 border-b border-neutral-200">
         <div>
-          <span class="font-display text-xs uppercase tracking-[0.3em] text-neutral-400 font-bold">Installation Archive</span>
-          <h2 class="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight mt-2">Sculpted Series</h2>
+          <span class="font-display text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neutral-400 font-bold">Installation Archive</span>
+          <h2 class="font-display text-2xl sm:text-5xl font-black uppercase tracking-tight mt-1.5 sm:mt-2">Sculpted Series</h2>
         </div>
-        <a href="#" class="mt-4 md:mt-0 font-bold text-xs uppercase tracking-[0.2em] text-neutral-800 hover:text-black underline underline-offset-8">
+        <a href="#" class="mt-3 md:mt-0 font-bold text-[11px] sm:text-xs uppercase tracking-[0.2em] text-neutral-800 hover:text-black underline underline-offset-8">
           View All Objects [03]
         </a>
       </div>
 
       <!-- 3-Column Showcase -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
         
         <!-- Object 1 -->
         <div class="group cursor-pointer">
-          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-4 sm:mb-5">
             <img src="4e27ccc2a0a97966d0abad16d44e24fb.jpg" alt="Layered Trench Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 01</span>
+            <span class="absolute top-3 sm:top-4 left-3 sm:left-4 bg-white/90 backdrop-blur px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-black">Object 01</span>
           </div>
           <div class="flex justify-between items-start">
             <div>
-              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Outerwear Installation</span>
-              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Multi-Layered Trench Sculpture</h3>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Outerwear Installation</span>
+              <h3 class="font-display text-sm sm:text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Multi-Layered Trench Sculpture</h3>
             </div>
-            <span class="font-display text-sm font-bold">₩ 680,000</span>
+            <span class="font-display text-xs sm:text-sm font-bold">₩ 680,000</span>
           </div>
         </div>
 
         <!-- Object 2 -->
         <div class="group cursor-pointer">
-          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-4 sm:mb-5">
             <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Tailored Suit Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 02</span>
+            <span class="absolute top-3 sm:top-4 left-3 sm:left-4 bg-white/90 backdrop-blur px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-black">Object 02</span>
           </div>
           <div class="flex justify-between items-start">
             <div>
-              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Tailoring Installation</span>
-              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Deconstructed Suiting Set</h3>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Tailoring Installation</span>
+              <h3 class="font-display text-sm sm:text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Deconstructed Suiting Set</h3>
             </div>
-            <span class="font-display text-sm font-bold">₩ 520,000</span>
+            <span class="font-display text-xs sm:text-sm font-bold">₩ 520,000</span>
           </div>
         </div>
 
         <!-- Object 3 -->
         <div class="group cursor-pointer sm:col-span-2 lg:col-span-1">
-          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-4 sm:mb-5">
             <img src="2a2db9f483a8e7a9b052db5fbfa36067.jpg" alt="Leather Set Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 03</span>
+            <span class="absolute top-3 sm:top-4 left-3 sm:left-4 bg-white/90 backdrop-blur px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-black">Object 03</span>
           </div>
           <div class="flex justify-between items-start">
             <div>
-              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Leatherwear Installation</span>
-              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Zip-Embossed Leather jumpsuit</h3>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Leatherwear Installation</span>
+              <h3 class="font-display text-sm sm:text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Zip-Embossed Leather jumpsuit</h3>
             </div>
-            <span class="font-display text-sm font-bold">₩ 740,000</span>
+            <span class="font-display text-xs sm:text-sm font-bold">₩ 740,000</span>
           </div>
         </div>
 
@@ -234,13 +233,13 @@
   </section>
 
   <!-- 5. Footer -->
-  <footer class="bg-black text-white py-20 sm:py-24 px-6 sm:px-12 border-t border-neutral-900">
-    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-10 sm:space-y-12">
-      <span class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">
+  <footer class="bg-black text-white py-16 sm:py-24 px-5 sm:px-12 border-t border-neutral-900">
+    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-8 sm:space-y-12">
+      <span class="font-display text-5xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">
         YUNG
       </span>
 
-      <div class="flex flex-wrap justify-center gap-6 sm:gap-8 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
+      <div class="flex flex-wrap justify-center gap-5 sm:gap-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400">
         <a href="#" class="hover:text-white transition-colors">Instagram</a>
         <a href="#" class="hover:text-white transition-colors">Archive</a>
         <a href="#" class="hover:text-white transition-colors">Exhibition</a>
@@ -248,15 +247,15 @@
         <a href="#" class="hover:text-white transition-colors">Contact</a>
       </div>
 
-      <p class="text-xs text-neutral-600 font-normal tracking-widest pt-8 border-t border-neutral-900 w-full">
+      <p class="text-[11px] sm:text-xs text-neutral-600 font-normal tracking-widest pt-6 sm:pt-8 border-t border-neutral-900 w-full">
         © 2026 YUNG. ALL RIGHTS RESERVED.
       </p>
     </div>
   </footer>
 
-  <!-- 6. Scripts (Header, Slider & Mobile Swipe) -->
+  <!-- 6. Scripts (Directional Scroll Header & 4s Hero Slider) -->
   <script>
-    // --- 상단 네비게이션: 초기 표시, 스크롤 방향 감지 ---
+    // --- 상단 네비게이션 스크롤 감지 ---
     const header = document.getElementById('main-header');
     let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -275,12 +274,12 @@
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // --- 히어로 크로스페이드 슬라이더 & 모바일 제스처 ---
+    // --- 히어로 크로스페이드 슬라이더 (4초 주기) ---
     const layers = document.querySelectorAll('.hero-bg-layer');
     const dots = document.querySelectorAll('.slide-dot');
     let currentSlide = 0;
     const totalSlides = layers.length;
-    const slideDuration = 4500;
+    const slideDuration = 4000; // 4초로 변경
     let slideTimer = null;
 
     function goToSlide(index) {
@@ -319,7 +318,7 @@
       });
     });
 
-    // 모바일 터치 스와이프 지원
+    // 모바일 터치 스와이프 제스처
     const heroSection = document.getElementById('hero-section');
     let touchStartX = 0;
 
@@ -332,8 +331,8 @@
       const diffX = touchStartX - touchEndX;
 
       if (Math.abs(diffX) > 40) {
-        if (diffX > 0) nextSlide(); // 왼쪽 스와이프 -> 다음
-        else prevSlide();           // 오른쪽 스와이프 -> 이전
+        if (diffX > 0) nextSlide();
+        else prevSlide();
         resetTimer();
       }
     }, { passive: true });
