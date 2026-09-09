@@ -38,23 +38,29 @@
       animation: logoZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* 메인 풀스크린 크로스페이드 이미지 전환 & 미세 줌 효과 */
+    /* 메인 풀스크린 크로스페이드 레이어 & 미세 줌 효과 */
     .hero-bg-layer {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center;
       opacity: 0;
       transform: scale(1.06);
       transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
       will-change: opacity, transform;
+      pointer-events: none;
+    }
+    .hero-bg-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
     .hero-bg-layer.active {
       opacity: 1;
       transform: scale(1);
       z-index: 1;
+      pointer-events: auto;
     }
 
     /* 자연스럽게 스며드는 텍스트 블렌드 효과 */
@@ -81,7 +87,7 @@
       opacity: 0;
     }
   </style>
-<link rel="shortcut icon" type="image" href="로고.png">
+  <link rel="shortcut icon" type="image" href="로고.png">
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
 
@@ -93,25 +99,25 @@
   </div>
 
   <!-- 2. Transparent Header (초기 접속 시 표시 / 스크롤 방향에 따라 자동 전환) -->
-  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-8 select-none transition-all duration-300">
-    <div class="max-w-[1700px] mx-auto px-6 sm:px-12 flex items-center justify-between">
+  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-6 sm:py-8 select-none transition-all duration-300">
+    <div class="max-w-[1700px] mx-auto px-5 sm:px-12 flex items-center justify-between">
       
       <!-- Left Menu Links -->
-      <nav class="nav-fade-target flex items-center space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 flex-1">
+      <nav class="nav-fade-target flex items-center space-x-6 sm:space-x-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white/80 flex-1">
         <a href="#collections" class="hover:text-white transition-colors duration-200">Archive</a>
         <a href="#collections" class="hover:text-white transition-colors duration-200">Object</a>
-        <a href="#collections" class="hover:text-white transition-colors duration-200">Exhibition</a>
+        <a href="#collections" class="hidden sm:inline-block hover:text-white transition-colors duration-200">Exhibition</a>
       </nav>
 
       <!-- Center Mini Logo -->
       <div class="nav-fade-target flex justify-center items-center">
-        <a href="#" class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
+        <a href="#" class="font-display text-xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
           YUNG
         </a>
       </div>
 
       <!-- Right Utility Actions -->
-      <div class="nav-fade-target flex items-center justify-end space-x-6 sm:space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 flex-1">
+      <div class="nav-fade-target flex items-center justify-end space-x-5 sm:space-x-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-white/80 flex-1">
         <button class="hidden sm:inline-block hover:text-white transition-colors duration-200">Search</button>
         <a href="#" class="hidden md:inline-block hover:text-white transition-colors duration-200">About</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Bag (0)</a>
@@ -123,31 +129,46 @@
     <div class="nav-guide-line absolute top-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
   </header>
 
-  <!-- 3. Full-Screen Hero Visual Section -->
-  <section class="relative w-full h-screen overflow-hidden flex items-center justify-center select-none bg-black">
+  <!-- 3. Full-Screen Hero Visual Section (모바일 100dvh 지원) -->
+  <section id="hero-section" class="relative w-full h-[100dvh] min-h-[500px] overflow-hidden flex items-center justify-center select-none bg-black">
     
-    <!-- Crossfade Image Container -->
+    <!-- Crossfade Image Container (PC/모바일 반응형 picture 분기) -->
     <div id="hero-image-container" class="absolute inset-0 w-full h-full">
-      <img src="풀스크린_no-watermark.png" alt="Artwork 01" class="hero-bg-layer active" />
-      <img src="풀스크린2_no-watermark.png" alt="Artwork 02" class="hero-bg-layer" />
-      <img src="풀스크린1_no-watermark.png" alt="Artwork 03" class="hero-bg-layer" />
+      
+      <!-- Slide 1 -->
+      <picture class="hero-bg-layer active">
+        <!-- 모바일 전용 세로 이미지 (필요시 모바일용 파일명 지정, 없을 경우 동일 이미지 사용 가능) -->
+        <source media="(max-width: 768px)" srcset="풀스크린_no-watermark.png" />
+        <img src="풀스크린_no-watermark.png" alt="Artwork 01" />
+      </picture>
+
+      <!-- Slide 2 -->
+      <picture class="hero-bg-layer">
+        <source media="(max-width: 768px)" srcset="풀스크린2_no-watermark.png" />
+        <img src="풀스크린2_no-watermark.png" alt="Artwork 02" />
+      </picture>
+
+      <!-- Slide 3 -->
+      <picture class="hero-bg-layer">
+        <source media="(max-width: 768px)" srcset="풀스크린1_no-watermark.png" />
+        <img src="풀스크린1_no-watermark.png" alt="Artwork 03" />
+      </picture>
+
     </div>
 
     <!-- Vignette Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/60 z-[2] pointer-events-none"></div>
-
-   
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
 
     <!-- 하단 상태 인디케이터 슬라이드 바 -->
-    <div class="absolute bottom-10 z-20 flex items-center gap-3">
-      <div class="slide-dot w-8 h-[2px] bg-white transition-all duration-500"></div>
-      <div class="slide-dot w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
-      <div class="slide-dot w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
+    <div class="absolute bottom-8 sm:bottom-10 z-20 flex items-center gap-3">
+      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white transition-all duration-500"></div>
+      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
+      <div class="slide-dot w-7 sm:w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
     </div>
   </section>
 
   <!-- 4. Curated Collection Section -->
-  <section id="collections" class="py-28 bg-[#fafafa] text-neutral-900">
+  <section id="collections" class="py-24 sm:py-28 bg-[#fafafa] text-neutral-900">
     <div class="max-w-[1600px] mx-auto px-6 sm:px-12">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-neutral-200">
@@ -213,13 +234,13 @@
   </section>
 
   <!-- 5. Footer -->
-  <footer class="bg-black text-white py-24 px-6 sm:px-12 border-t border-neutral-900">
-    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-12">
+  <footer class="bg-black text-white py-20 sm:py-24 px-6 sm:px-12 border-t border-neutral-900">
+    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-10 sm:space-y-12">
       <span class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">
         YUNG
       </span>
 
-      <div class="flex flex-wrap justify-center gap-8 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
+      <div class="flex flex-wrap justify-center gap-6 sm:gap-8 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
         <a href="#" class="hover:text-white transition-colors">Instagram</a>
         <a href="#" class="hover:text-white transition-colors">Archive</a>
         <a href="#" class="hover:text-white transition-colors">Exhibition</a>
@@ -233,9 +254,9 @@
     </div>
   </footer>
 
-  <!-- 6. Scripts (Directional Scroll Header & Hero Slider) -->
+  <!-- 6. Scripts (Header, Slider & Mobile Swipe) -->
   <script>
-    // --- 상단 네비게이션: 초기 표시, 스크롤 다운 시 숨김, 스크롤 업 시 표시 ---
+    // --- 상단 네비게이션: 초기 표시, 스크롤 방향 감지 ---
     const header = document.getElementById('main-header');
     let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -243,60 +264,79 @@
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
       const scrollDiff = lastScrollY - currentScrollY;
 
-      // 최상단 영역에서는 항상 표시
       if (currentScrollY <= 15) {
         header.classList.add('is-revealed');
-      } 
-      // 스크롤을 위로 올릴 때 펼쳐짐
-      else if (scrollDiff > 4) {
+      } else if (scrollDiff > 4) {
         header.classList.add('is-revealed');
-      } 
-      // 스크롤을 아래로 내릴 때 사라짐
-      else if (scrollDiff < -4) {
+      } else if (scrollDiff < -4) {
         header.classList.remove('is-revealed');
       }
 
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // --- 히어로 크로스페이드 슬라이더 ---
+    // --- 히어로 크로스페이드 슬라이더 & 모바일 제스처 ---
     const layers = document.querySelectorAll('.hero-bg-layer');
     const dots = document.querySelectorAll('.slide-dot');
     let currentSlide = 0;
     const totalSlides = layers.length;
     const slideDuration = 4500;
+    let slideTimer = null;
 
-    function nextSlide() {
+    function goToSlide(index) {
       layers[currentSlide].classList.remove('active');
       dots[currentSlide].classList.remove('bg-white');
       dots[currentSlide].classList.add('bg-white/30');
 
-      currentSlide = (currentSlide + 1) % totalSlides;
+      currentSlide = (index + totalSlides) % totalSlides;
 
       layers[currentSlide].classList.add('active');
       dots[currentSlide].classList.remove('bg-white/30');
       dots[currentSlide].classList.add('bg-white');
     }
 
-    let slideTimer = setInterval(nextSlide, slideDuration);
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
 
+    function prevSlide() {
+      goToSlide(currentSlide - 1);
+    }
+
+    function resetTimer() {
+      if (slideTimer) clearInterval(slideTimer);
+      slideTimer = setInterval(nextSlide, slideDuration);
+    }
+
+    resetTimer();
+
+    // 인디케이터 클릭 이벤트
     dots.forEach((dot, index) => {
       dot.style.cursor = 'pointer';
       dot.addEventListener('click', () => {
-        clearInterval(slideTimer);
-        layers[currentSlide].classList.remove('active');
-        dots[currentSlide].classList.remove('bg-white');
-        dots[currentSlide].classList.add('bg-white/30');
-
-        currentSlide = index;
-
-        layers[currentSlide].classList.add('active');
-        dots[currentSlide].classList.remove('bg-white/30');
-        dots[currentSlide].classList.add('bg-white');
-
-        slideTimer = setInterval(nextSlide, slideDuration);
+        goToSlide(index);
+        resetTimer();
       });
     });
+
+    // 모바일 터치 스와이프 지원
+    const heroSection = document.getElementById('hero-section');
+    let touchStartX = 0;
+
+    heroSection.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    heroSection.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffX = touchStartX - touchEndX;
+
+      if (Math.abs(diffX) > 40) {
+        if (diffX > 0) nextSlide(); // 왼쪽 스와이프 -> 다음
+        else prevSlide();           // 오른쪽 스와이프 -> 이전
+        resetTimer();
+      }
+    }, { passive: true });
   </script>
 
 </body>
