@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YUNG</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-display {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* 인트로 스플래시 애니메이션 */
+    @keyframes splashSequence {
+      0% { opacity: 1; visibility: visible; }
+      70% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    @keyframes logoZoom {
+      0% { transform: scale(0.95); opacity: 0; }
+      25% { transform: scale(1); opacity: 1; }
+      75% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.05); opacity: 0; }
+    }
+    #splash-screen {
+      animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    #splash-logo {
+      animation: logoZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 메인 풀스크린 크로스페이드 이미지 전환 & 미세 줌 효과 */
+    .hero-bg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
+      will-change: opacity, transform;
+    }
+    .hero-bg-layer.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    /* 자연스럽게 스며드는 텍스트 블렌드 효과 */
+    .blend-hero-logo {
+      mix-blend-mode: overlay;
+      text-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    /* 히든 네비게이션 트랜지션 (스크롤/호버 상태 제어) */
+    .nav-fade-target {
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    header:hover .nav-fade-target,
+    header.is-revealed .nav-fade-target {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    header:hover .nav-guide-line,
+    header.is-revealed .nav-guide-line {
+      opacity: 0;
+    }
+  </style>
+<link rel="shortcut icon" type="image" href="로고.png">
+</head>
+<body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
+
+  <!-- 1. Intro Splash Screen (흰 바탕 + 검정 로고) -->
+  <div id="splash-screen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white pointer-events-none">
+    <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
+      YUNG
+    </div>
+  </div>
+
+  <!-- 2. Transparent Header (초기 접속 시 표시 / 스크롤 방향에 따라 자동 전환) -->
+  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-8 select-none transition-all duration-300">
+    <div class="max-w-[1700px] mx-auto px-6 sm:px-12 flex items-center justify-between">
+      
+      <!-- Left Menu Links -->
+      <nav class="nav-fade-target flex items-center space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 flex-1">
+        <a href="#collections" class="hover:text-white transition-colors duration-200">Archive</a>
+        <a href="#collections" class="hover:text-white transition-colors duration-200">Object</a>
+        <a href="#collections" class="hover:text-white transition-colors duration-200">Exhibition</a>
+      </nav>
+
+      <!-- Center Mini Logo -->
+      <div class="nav-fade-target flex justify-center items-center">
+        <a href="#" class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
+          YUNG
+        </a>
+      </div>
+
+      <!-- Right Utility Actions -->
+      <div class="nav-fade-target flex items-center justify-end space-x-6 sm:space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 flex-1">
+        <button class="hidden sm:inline-block hover:text-white transition-colors duration-200">Search</button>
+        <a href="#" class="hidden md:inline-block hover:text-white transition-colors duration-200">About</a>
+        <a href="#" class="hover:text-white transition-colors duration-200">Bag (0)</a>
+      </div>
+
+    </div>
+
+    <!-- 숨겨졌을 때 표시되는 상단 미세 가이드 라인 -->
+    <div class="nav-guide-line absolute top-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
+  </header>
+
+  <!-- 3. Full-Screen Hero Visual Section -->
+  <section class="relative w-full h-screen overflow-hidden flex items-center justify-center select-none bg-black">
+    
+    <!-- Crossfade Image Container -->
+    <div id="hero-image-container" class="absolute inset-0 w-full h-full">
+      <img src="풀스크린_no-watermark.png" alt="Artwork 01" class="hero-bg-layer active" />
+      <img src="풀스크린2_no-watermark.png" alt="Artwork 02" class="hero-bg-layer" />
+      <img src="풀스크린1_no-watermark.png" alt="Artwork 03" class="hero-bg-layer" />
+    </div>
+
+    <!-- Vignette Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/60 z-[2] pointer-events-none"></div>
+
+   
+
+    <!-- 하단 상태 인디케이터 슬라이드 바 -->
+    <div class="absolute bottom-10 z-20 flex items-center gap-3">
+      <div class="slide-dot w-8 h-[2px] bg-white transition-all duration-500"></div>
+      <div class="slide-dot w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
+      <div class="slide-dot w-8 h-[2px] bg-white/30 transition-all duration-500"></div>
+    </div>
+  </section>
+
+  <!-- 4. Curated Collection Section -->
+  <section id="collections" class="py-28 bg-[#fafafa] text-neutral-900">
+    <div class="max-w-[1600px] mx-auto px-6 sm:px-12">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-neutral-200">
+        <div>
+          <span class="font-display text-xs uppercase tracking-[0.3em] text-neutral-400 font-bold">Installation Archive</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight mt-2">Sculpted Series</h2>
+        </div>
+        <a href="#" class="mt-4 md:mt-0 font-bold text-xs uppercase tracking-[0.2em] text-neutral-800 hover:text-black underline underline-offset-8">
+          View All Objects [03]
+        </a>
+      </div>
+
+      <!-- 3-Column Showcase -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        
+        <!-- Object 1 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+            <img src="4e27ccc2a0a97966d0abad16d44e24fb.jpg" alt="Layered Trench Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 01</span>
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Outerwear Installation</span>
+              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Multi-Layered Trench Sculpture</h3>
+            </div>
+            <span class="font-display text-sm font-bold">₩ 680,000</span>
+          </div>
+        </div>
+
+        <!-- Object 2 -->
+        <div class="group cursor-pointer">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+            <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Tailored Suit Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 02</span>
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Tailoring Installation</span>
+              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Deconstructed Suiting Set</h3>
+            </div>
+            <span class="font-display text-sm font-bold">₩ 520,000</span>
+          </div>
+        </div>
+
+        <!-- Object 3 -->
+        <div class="group cursor-pointer sm:col-span-2 lg:col-span-1">
+          <div class="relative overflow-hidden aspect-[3/4] bg-neutral-200 mb-5">
+            <img src="2a2db9f483a8e7a9b052db5fbfa36067.jpg" alt="Leather Set Object" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black">Object 03</span>
+          </div>
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] uppercase tracking-[0.2em] text-neutral-400 font-semibold">Leatherwear Installation</span>
+              <h3 class="font-display text-base font-bold uppercase tracking-tight text-neutral-900 mt-1">Zip-Embossed Leather jumpsuit</h3>
+            </div>
+            <span class="font-display text-sm font-bold">₩ 740,000</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Footer -->
+  <footer class="bg-black text-white py-24 px-6 sm:px-12 border-t border-neutral-900">
+    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-12">
+      <span class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">
+        YUNG
+      </span>
+
+      <div class="flex flex-wrap justify-center gap-8 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
+        <a href="#" class="hover:text-white transition-colors">Instagram</a>
+        <a href="#" class="hover:text-white transition-colors">Archive</a>
+        <a href="#" class="hover:text-white transition-colors">Exhibition</a>
+        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-white transition-colors">Contact</a>
+      </div>
+
+      <p class="text-xs text-neutral-600 font-normal tracking-widest pt-8 border-t border-neutral-900 w-full">
+        © 2026 YUNG. ALL RIGHTS RESERVED.
+      </p>
+    </div>
+  </footer>
+
+  <!-- 6. Scripts (Directional Scroll Header & Hero Slider) -->
+  <script>
+    // --- 상단 네비게이션: 초기 표시, 스크롤 다운 시 숨김, 스크롤 업 시 표시 ---
+    const header = document.getElementById('main-header');
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollDiff = lastScrollY - currentScrollY;
+
+      // 최상단 영역에서는 항상 표시
+      if (currentScrollY <= 15) {
+        header.classList.add('is-revealed');
+      } 
+      // 스크롤을 위로 올릴 때 펼쳐짐
+      else if (scrollDiff > 4) {
+        header.classList.add('is-revealed');
+      } 
+      // 스크롤을 아래로 내릴 때 사라짐
+      else if (scrollDiff < -4) {
+        header.classList.remove('is-revealed');
+      }
+
+      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+    }, { passive: true });
+
+    // --- 히어로 크로스페이드 슬라이더 ---
+    const layers = document.querySelectorAll('.hero-bg-layer');
+    const dots = document.querySelectorAll('.slide-dot');
+    let currentSlide = 0;
+    const totalSlides = layers.length;
+    const slideDuration = 4500;
+
+    function nextSlide() {
+      layers[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('bg-white');
+      dots[currentSlide].classList.add('bg-white/30');
+
+      currentSlide = (currentSlide + 1) % totalSlides;
+
+      layers[currentSlide].classList.add('active');
+      dots[currentSlide].classList.remove('bg-white/30');
+      dots[currentSlide].classList.add('bg-white');
+    }
+
+    let slideTimer = setInterval(nextSlide, slideDuration);
+
+    dots.forEach((dot, index) => {
+      dot.style.cursor = 'pointer';
+      dot.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        layers[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('bg-white');
+        dots[currentSlide].classList.add('bg-white/30');
+
+        currentSlide = index;
+
+        layers[currentSlide].classList.add('active');
+        dots[currentSlide].classList.remove('bg-white/30');
+        dots[currentSlide].classList.add('bg-white');
+
+        slideTimer = setInterval(nextSlide, slideDuration);
+      });
+    });
+  </script>
+
+</body>
+</html>
