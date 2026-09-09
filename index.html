@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="bg-white">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <!-- 모바일 상단 주소창/노치 영역까지 완벽히 흰색으로 채우기 위한 메타 태그 -->
+  <!-- 모바일 상단 노치 및 하단 홈 바 영역까지 흰색으로 동기화 -->
   <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>YUNG</title>
@@ -16,6 +16,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   
   <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
@@ -23,19 +29,22 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* 1. 인트로 스플래시: 모바일 상·하단 툴바 및 안전구역(SafeArea) 여백 완벽 제거 */
+    /* 1. 모바일 뷰포트 빈틈 완벽 차단 인트로 스플래시 */
     #splash-screen {
       position: fixed;
-      top: -100px;
-      bottom: -100px;
+      top: 0;
       left: 0;
       right: 0;
+      bottom: 0;
       width: 100vw;
-      height: calc(100vh + 200px);
-      height: calc(100dvh + 200px);
+      height: 100vh;
+      height: 100dvh;
       height: -webkit-fill-available;
       background-color: #ffffff;
       z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: opacity, visibility;
     }
@@ -86,7 +95,7 @@
       text-shadow: 0 15px 35px rgba(0,0,0,0.25);
     }
 
-    /* 3. 히든 네비게이션 트랜지션 (PC/모바일 공통) */
+    /* 3. 히든 네비게이션 트랜지션 */
     .nav-fade-target {
       opacity: 0;
       transform: translateY(-6px);
@@ -103,7 +112,7 @@
       opacity: 0;
     }
 
-    /* 4. 모바일 전용 전체화면 드로어 메뉴 애니메이션 */
+    /* 4. 모바일 햄버거 오버레이 드로어 */
     #mobile-drawer {
       transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -116,7 +125,7 @@
     #mobile-drawer:not(.is-open) {
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-12px);
+      transform: translateY(-10px);
       pointer-events: none;
     }
   </style>
@@ -124,8 +133,8 @@
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
 
-  <!-- 1. Intro Splash Screen (모바일 상단 주소창 및 하단까지 빈틈없이 하얗게 채움) -->
-  <div id="splash-screen" class="flex items-center justify-center pointer-events-none">
+  <!-- 1. Intro Splash Screen (모바일 사파리 하단 바까지 완전 차단) -->
+  <div id="splash-screen" class="pointer-events-none">
     <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
       YUNG
     </div>
@@ -135,14 +144,14 @@
   <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-5 sm:py-8 select-none transition-all duration-300">
     <div class="max-w-[1700px] mx-auto px-5 sm:px-12 flex items-center justify-between">
       
-      <!-- [PC 전용] Left Menu Links (태블릿/PC 이상 표시) -->
+      <!-- [PC] Left Menu Links -->
       <nav class="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 nav-fade-target flex-1">
         <a href="#collections" class="hover:text-white transition-colors duration-200">Archive</a>
         <a href="#collections" class="hover:text-white transition-colors duration-200">Object</a>
         <a href="#collections" class="hover:text-white transition-colors duration-200">Exhibition</a>
       </nav>
 
-      <!-- [모바일 전용] Left Hamburger Button (모바일 화면 전용) -->
+      <!-- [모바일] Left Hamburger Button -->
       <div class="flex md:hidden items-center flex-1 nav-fade-target">
         <button id="hamburger-btn" aria-label="Open Menu" class="text-white hover:text-white/70 p-1 transition-colors">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,14 +167,14 @@
         </a>
       </div>
 
-      <!-- [PC 전용] Right Utility Actions -->
+      <!-- [PC] Right Utility Actions -->
       <div class="hidden md:flex items-center justify-end space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 nav-fade-target flex-1">
         <button class="hover:text-white transition-colors duration-200">Search</button>
         <a href="#" class="hover:text-white transition-colors duration-200">About</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Bag (0)</a>
       </div>
 
-      <!-- [모바일 전용] Right Quick Bag Link -->
+      <!-- [모바일] Right Bag Link -->
       <div class="flex md:hidden items-center justify-end flex-1 nav-fade-target">
         <a href="#" class="text-xs font-bold uppercase tracking-[0.18em] text-white/90 hover:text-white">
           Bag (0)
@@ -178,10 +187,10 @@
     <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
   </header>
 
-  <!-- 2-1. [모바일 전용] Full-Screen Overlay Navigation Drawer -->
+  <!-- 2-1. [모바일] Full-Screen Navigation Drawer (기존 메뉴 폰트 적용) -->
   <div id="mobile-drawer" class="fixed inset-0 w-full h-[100dvh] z-[9999] bg-black/95 backdrop-blur-2xl text-white flex flex-col justify-between p-8 sm:p-12 md:hidden">
     
-    <!-- Drawer Top (Close Button) -->
+    <!-- Drawer Top -->
     <div class="flex items-center justify-between">
       <span class="font-display text-2xl font-black tracking-[-0.07em]">YUNG</span>
       <button id="drawer-close-btn" aria-label="Close Menu" class="p-2 text-white/80 hover:text-white">
@@ -191,23 +200,23 @@
       </button>
     </div>
 
-    <!-- Drawer Links -->
-    <nav class="flex flex-col space-y-6 my-auto">
-      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Archive</a>
-      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Object</a>
-      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Exhibition</a>
-      <a href="#" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">About</a>
-      <a href="#" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Search</a>
+    <!-- Drawer Links (기존 메뉴 폰트: Plus Jakarta Sans / Bold / Uppercase) -->
+    <nav class="flex flex-col space-y-7 my-auto">
+      <a href="#collections" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Archive</a>
+      <a href="#collections" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Object</a>
+      <a href="#collections" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Exhibition</a>
+      <a href="#" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">About</a>
+      <a href="#" class="drawer-link text-2xl font-bold uppercase tracking-[0.2em] text-white/90 hover:text-white transition-colors">Search</a>
     </nav>
 
     <!-- Drawer Bottom -->
-    <div class="flex justify-between items-center pt-6 border-t border-white/10 text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">
+    <div class="flex justify-between items-center pt-6 border-t border-white/10 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400">
       <a href="#" class="hover:text-white transition-colors">Instagram</a>
       <span>© 2026 YUNG</span>
     </div>
   </div>
 
-  <!-- 3. Full-Screen Hero Visual Section (모바일 100dvh 지원) -->
+  <!-- 3. Full-Screen Hero Visual Section (100dvh) -->
   <section id="hero-section" class="relative w-full h-[100dvh] min-h-[480px] overflow-hidden flex items-center justify-center select-none bg-black">
     
     <!-- Crossfade Image Container -->
@@ -236,7 +245,7 @@
     <!-- Vignette Overlay -->
     <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
 
-    <!-- 하단 상태 인디케이터 슬라이드 바 -->
+    <!-- 하단 상태 인디케이터 -->
     <div class="absolute bottom-6 sm:bottom-10 z-20 flex items-center gap-2 sm:gap-3">
       <div class="slide-dot w-6 sm:w-8 h-[2px] bg-white transition-all duration-300"></div>
       <div class="slide-dot w-6 sm:w-8 h-[2px] bg-white/30 transition-all duration-300"></div>
@@ -331,9 +340,9 @@
     </div>
   </footer>
 
-  <!-- 6. Scripts (Mobile Drawer, Directional Header & 4s Hero Slider) -->
+  <!-- 6. Scripts -->
   <script>
-    // --- 모바일 햄버거 드로어 열기/닫기 제어 ---
+    // 드로어 제어
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const drawerCloseBtn = document.getElementById('drawer-close-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
@@ -341,7 +350,7 @@
 
     function openDrawer() {
       mobileDrawer.classList.add('is-open');
-      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+      document.body.style.overflow = 'hidden';
     }
 
     function closeDrawer() {
@@ -353,7 +362,7 @@
     if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
     drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
-    // --- 상단 헤더 방향 스크롤 감지 ---
+    // 스크롤 헤더 방향 감지
     const header = document.getElementById('main-header');
     let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -372,7 +381,7 @@
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // --- 히어로 크로스페이드 슬라이더 (4초 주기) ---
+    // 히어로 슬라이더 (4초)
     const layers = document.querySelectorAll('.hero-bg-layer');
     const dots = document.querySelectorAll('.slide-dot');
     let currentSlide = 0;
@@ -407,7 +416,6 @@
 
     resetTimer();
 
-    // 인디케이터 클릭 이벤트
     dots.forEach((dot, index) => {
       dot.style.cursor = 'pointer';
       dot.addEventListener('click', () => {
@@ -416,7 +424,7 @@
       });
     });
 
-    // 모바일 터치 스와이프 제스처
+    // 모바일 터치 스와이프
     const heroSection = document.getElementById('hero-section');
     let touchStartX = 0;
 
