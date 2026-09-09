@@ -2,8 +2,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- 모바일 상단 주소창/노치 영역까지 완벽히 흰색으로 채우기 위한 메타 태그 -->
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>YUNG</title>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -19,11 +23,27 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* 인트로 스플래시 애니메이션 (모바일 뷰포트 빈틈 완벽 차단) */
+    /* 1. 인트로 스플래시: 모바일 상·하단 툴바 및 안전구역(SafeArea) 여백 완벽 제거 */
+    #splash-screen {
+      position: fixed;
+      top: -100px;
+      bottom: -100px;
+      left: 0;
+      right: 0;
+      width: 100vw;
+      height: calc(100vh + 200px);
+      height: calc(100dvh + 200px);
+      height: -webkit-fill-available;
+      background-color: #ffffff;
+      z-index: 999999;
+      animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: opacity, visibility;
+    }
+
     @keyframes splashSequence {
       0% { opacity: 1; visibility: visible; }
       75% { opacity: 1; visibility: visible; }
-      100% { opacity: 0; visibility: hidden; }
+      100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
     @keyframes logoZoom {
       0% { transform: scale(0.95); opacity: 0; }
@@ -31,14 +51,11 @@
       75% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.04); opacity: 0; }
     }
-    #splash-screen {
-      animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
     #splash-logo {
       animation: logoZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* 메인 풀스크린 크로스페이드 레이어 & 전환 속도 최적화 */
+    /* 2. 메인 풀스크린 크로스페이드 레이어 */
     .hero-bg-layer {
       position: absolute;
       inset: 0;
@@ -69,7 +86,7 @@
       text-shadow: 0 15px 35px rgba(0,0,0,0.25);
     }
 
-    /* 히든 네비게이션 트랜지션 */
+    /* 3. 히든 네비게이션 트랜지션 (PC/모바일 공통) */
     .nav-fade-target {
       opacity: 0;
       transform: translateY(-6px);
@@ -81,53 +98,114 @@
       opacity: 1;
       transform: translateY(0);
     }
-
     header:hover .nav-guide-line,
     header.is-revealed .nav-guide-line {
       opacity: 0;
+    }
+
+    /* 4. 모바일 전용 전체화면 드로어 메뉴 애니메이션 */
+    #mobile-drawer {
+      transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #mobile-drawer.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #mobile-drawer:not(.is-open) {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-12px);
+      pointer-events: none;
     }
   </style>
   <link rel="shortcut icon" type="image" href="로고.png">
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black overflow-x-hidden">
 
-  <!-- 1. Intro Splash Screen (모바일 100dvh 풀스크린 적용으로 여백 제거) -->
-  <div id="splash-screen" class="fixed inset-0 w-full h-[100dvh] z-[9999] flex items-center justify-center bg-white pointer-events-none">
-    <div id="splash-logo" class="font-display text-5xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
+  <!-- 1. Intro Splash Screen (모바일 상단 주소창 및 하단까지 빈틈없이 하얗게 채움) -->
+  <div id="splash-screen" class="flex items-center justify-center pointer-events-none">
+    <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">
       YUNG
     </div>
   </div>
 
-  <!-- 2. Responsive Transparent Header (모바일 맞춤 간격 및 폰트 축소 적용) -->
-  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-4 sm:py-8 select-none transition-all duration-300">
-    <div class="max-w-[1700px] mx-auto px-4 sm:px-12 flex items-center justify-between">
+  <!-- 2. Transparent Directional Header -->
+  <header id="main-header" class="is-revealed group fixed top-0 left-0 w-full z-50 bg-transparent py-5 sm:py-8 select-none transition-all duration-300">
+    <div class="max-w-[1700px] mx-auto px-5 sm:px-12 flex items-center justify-between">
       
-      <!-- Left Menu Links -->
-      <nav class="nav-fade-target flex items-center space-x-3.5 sm:space-x-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/80 flex-1">
+      <!-- [PC 전용] Left Menu Links (태블릿/PC 이상 표시) -->
+      <nav class="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 nav-fade-target flex-1">
         <a href="#collections" class="hover:text-white transition-colors duration-200">Archive</a>
         <a href="#collections" class="hover:text-white transition-colors duration-200">Object</a>
-        <a href="#collections" class="hidden sm:inline-block hover:text-white transition-colors duration-200">Exhibition</a>
+        <a href="#collections" class="hover:text-white transition-colors duration-200">Exhibition</a>
       </nav>
+
+      <!-- [모바일 전용] Left Hamburger Button (모바일 화면 전용) -->
+      <div class="flex md:hidden items-center flex-1 nav-fade-target">
+        <button id="hamburger-btn" aria-label="Open Menu" class="text-white hover:text-white/70 p-1 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5"></path>
+          </svg>
+        </button>
+      </div>
 
       <!-- Center Mini Logo -->
       <div class="nav-fade-target flex justify-center items-center">
-        <a href="#" class="font-display text-lg sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
+        <a href="#" class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">
           YUNG
         </a>
       </div>
 
-      <!-- Right Utility Actions -->
-      <div class="nav-fade-target flex items-center justify-end space-x-3.5 sm:space-x-8 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-white/80 flex-1">
-        <button class="hidden sm:inline-block hover:text-white transition-colors duration-200">Search</button>
-        <a href="#" class="hidden md:inline-block hover:text-white transition-colors duration-200">About</a>
+      <!-- [PC 전용] Right Utility Actions -->
+      <div class="hidden md:flex items-center justify-end space-x-8 text-xs font-bold uppercase tracking-[0.25em] text-white/80 nav-fade-target flex-1">
+        <button class="hover:text-white transition-colors duration-200">Search</button>
+        <a href="#" class="hover:text-white transition-colors duration-200">About</a>
         <a href="#" class="hover:text-white transition-colors duration-200">Bag (0)</a>
+      </div>
+
+      <!-- [모바일 전용] Right Quick Bag Link -->
+      <div class="flex md:hidden items-center justify-end flex-1 nav-fade-target">
+        <a href="#" class="text-xs font-bold uppercase tracking-[0.18em] text-white/90 hover:text-white">
+          Bag (0)
+        </a>
       </div>
 
     </div>
 
-    <!-- 숨겨졌을 때 표시되는 상단 미세 가이드 라인 -->
+    <!-- 숨겨졌을 때 표시되는 미세 가이드 라인 -->
     <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
   </header>
+
+  <!-- 2-1. [모바일 전용] Full-Screen Overlay Navigation Drawer -->
+  <div id="mobile-drawer" class="fixed inset-0 w-full h-[100dvh] z-[9999] bg-black/95 backdrop-blur-2xl text-white flex flex-col justify-between p-8 sm:p-12 md:hidden">
+    
+    <!-- Drawer Top (Close Button) -->
+    <div class="flex items-center justify-between">
+      <span class="font-display text-2xl font-black tracking-[-0.07em]">YUNG</span>
+      <button id="drawer-close-btn" aria-label="Close Menu" class="p-2 text-white/80 hover:text-white">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Links -->
+    <nav class="flex flex-col space-y-6 my-auto">
+      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Archive</a>
+      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Object</a>
+      <a href="#collections" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Exhibition</a>
+      <a href="#" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">About</a>
+      <a href="#" class="drawer-link font-display text-3xl font-black uppercase tracking-tight hover:text-neutral-400 transition-colors">Search</a>
+    </nav>
+
+    <!-- Drawer Bottom -->
+    <div class="flex justify-between items-center pt-6 border-t border-white/10 text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">
+      <a href="#" class="hover:text-white transition-colors">Instagram</a>
+      <span>© 2026 YUNG</span>
+    </div>
+  </div>
 
   <!-- 3. Full-Screen Hero Visual Section (모바일 100dvh 지원) -->
   <section id="hero-section" class="relative w-full h-[100dvh] min-h-[480px] overflow-hidden flex items-center justify-center select-none bg-black">
@@ -253,9 +331,29 @@
     </div>
   </footer>
 
-  <!-- 6. Scripts (Directional Scroll Header & 4s Hero Slider) -->
+  <!-- 6. Scripts (Mobile Drawer, Directional Header & 4s Hero Slider) -->
   <script>
-    // --- 상단 네비게이션 스크롤 감지 ---
+    // --- 모바일 햄버거 드로어 열기/닫기 제어 ---
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    function openDrawer() {
+      mobileDrawer.classList.add('is-open');
+      document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    }
+
+    function closeDrawer() {
+      mobileDrawer.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburgerBtn) hamburgerBtn.addEventListener('click', openDrawer);
+    if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+
+    // --- 상단 헤더 방향 스크롤 감지 ---
     const header = document.getElementById('main-header');
     let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -279,7 +377,7 @@
     const dots = document.querySelectorAll('.slide-dot');
     let currentSlide = 0;
     const totalSlides = layers.length;
-    const slideDuration = 4000; // 4초로 변경
+    const slideDuration = 4000;
     let slideTimer = null;
 
     function goToSlide(index) {
