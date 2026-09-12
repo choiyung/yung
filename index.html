@@ -14,7 +14,7 @@
 
   <style>
     /* [기본 리셋 및 타이포그래피] */
-    html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0; scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-display { font-family: 'Montserrat', sans-serif; }
     .font-mono-custom { font-family: 'Space Mono', monospace; }
@@ -80,13 +80,31 @@
       transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
       will-change: opacity, transform; pointer-events: none;
     }
-    .hero-bg-layer img,
     .hero-bg-layer video {
       width: 100%; height: 100%;
       object-fit: cover; object-position: center;
     }
     .hero-bg-layer.active { opacity: 1; transform: scale(1); z-index: 1; pointer-events: auto; }
-    .slide-dot { cursor: pointer; }
+
+    /* 슬라이드 도트 프로그레스 게이지 */
+    .slide-dot {
+      cursor: pointer;
+      position: relative;
+      height: 2px;
+      background-color: rgba(255, 255, 255, 0.25);
+      overflow: hidden;
+      border-radius: 9999px;
+    }
+    .slide-dot .progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: #ffffff;
+      border-radius: 9999px;
+      will-change: width;
+    }
 
     /* [5. 독립 스크롤바 미니멀 커스텀] */
     .split-scroll-col {
@@ -175,7 +193,7 @@
       </button>
     </div>
 
-    <!-- 드로어 메뉴 링크 (사이즈 축소 및 정돈) -->
+    <!-- 드로어 메뉴 링크 -->
     <nav class="flex flex-col space-y-5 my-auto py-6">
       <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Archive</a>
       <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Object</a>
@@ -194,22 +212,39 @@
   <section class="w-full">
     <div class="hero-block" data-slider>
       <div class="hero-image-container">
-        <!-- 슬라이드 1: 풀스크린 비디오 (노출 시간 2배: 8초) -->
+        <!-- 슬라이드 1: 비디오 (10초) -->
         <div class="hero-bg-layer active">
           <video autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover">
             <source src="비디우.mp4" type="video/mp4" />
           </video>
         </div>
-        <!-- 슬라이드 2 (기본: 4초) -->
-        <picture class="hero-bg-layer"><img src="https://picsum.photos/seed/yung-a2/1600/2200" alt="Look 02"></picture>
-        <!-- 슬라이드 3 (기본: 4초) -->
-        <picture class="hero-bg-layer"><img src="https://picsum.photos/seed/yung-a3/1600/2200" alt="Look 03"></picture>
+        <!-- 슬라이드 2: 비디오 (10초) -->
+        <div class="hero-bg-layer">
+          <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="비디우3.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <!-- 슬라이드 3: 비디오 (10초) -->
+        <div class="hero-bg-layer">
+          <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="비디우2.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
+
       <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
-      <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3">
-        <div class="slide-dot w-6 sm:w-8 h-[2px] transition-all duration-300 bg-white"></div>
-        <div class="slide-dot w-6 sm:w-8 h-[2px] transition-all duration-300 bg-white/30"></div>
-        <div class="slide-dot w-6 sm:w-8 h-[2px] transition-all duration-300 bg-white/30"></div>
+
+      <!-- 슬라이드 인디케이터 (확장된 와이드 프로그레스 바) -->
+      <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 sm:gap-4">
+        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="0">
+          <div class="progress-bar"></div>
+        </div>
+        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="1">
+          <div class="progress-bar"></div>
+        </div>
+        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="2">
+          <div class="progress-bar"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -262,7 +297,7 @@
           </div>
         </article>
 
-        <article class="flex flex-col space-y-3 pb-8">
+        <article class="flex flex-col space-y-3 pb-16">
           <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 03</div>
           <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
             <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
@@ -331,7 +366,7 @@
           </div>
         </article>
 
-        <article class="flex flex-col space-y-3 pb-8">
+        <article class="flex flex-col space-y-3 pb-16">
           <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 03</div>
           <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
             <img src="https://picsum.photos/seed/arch-right-3/1200/900" alt="Archive 06" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700">
@@ -347,6 +382,13 @@
       </div>
 
     </div>
+
+    <!-- [아카이브 섹션 최하단 중앙: 프로스티드 글래스 최상단 이동 버튼] -->
+    <button id="back-to-top" aria-label="최상단으로 이동" class="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/50 hover:bg-white/75 backdrop-blur-xl border border-white/60 text-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center justify-center opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:scale-110 hover:shadow-[0_6px_20px_rgba(0,0,0,0.1)] active:scale-95 group focus:outline-none">
+      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:-translate-y-0.5 text-neutral-700 group-hover:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11l7-7m0 0l7 7m-7-7v16"></path>
+      </svg>
+    </button>
   </section>
 
   <!-- 6. [푸터 영역] -->
@@ -366,7 +408,7 @@
 
   <!-- 7. [인터랙션 스크립트] -->
   <script>
-    // 드로어 열기 / 닫기
+    // 1. 드로어 열기 / 닫기
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const drawerCloseBtn = document.getElementById('drawer-close-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
@@ -389,49 +431,97 @@
     if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
     drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
-    // 스크롤 헤더 노출/숨김
+    // 2. 스크롤 헤더 노출/숨김
     const header = document.getElementById('main-header');
     let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
     window.addEventListener('scroll', () => {
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
       const scrollDiff = lastScrollY - currentScrollY;
+
       if (currentScrollY <= 15) header.classList.add('is-revealed');
       else if (scrollDiff > 4) header.classList.add('is-revealed');
       else if (scrollDiff < -4) header.classList.remove('is-revealed');
+
       lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // 풀스크린 히어로 슬라이더 로직 (가변 듀레이션 적용)
+    // 3. 아카이브 섹션 최하단 도달 감지 및 최상단 이동 로직
+    const backToTopBtn = document.getElementById('back-to-top');
+    const splitCols = document.querySelectorAll('.split-scroll-col');
+
+    function checkSplitScrollBottom() {
+      let reachedBottom = false;
+      splitCols.forEach(col => {
+        if (col.scrollTop + col.clientHeight >= col.scrollHeight - 40) {
+          reachedBottom = true;
+        }
+      });
+
+      if (reachedBottom) {
+        backToTopBtn.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+        backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      } else {
+        backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        backToTopBtn.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+      }
+    }
+
+    splitCols.forEach(col => {
+      col.addEventListener('scroll', checkSplitScrollBottom, { passive: true });
+    });
+
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        splitCols.forEach(col => {
+          col.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // 4. 풀스크린 히어로 슬라이더 (10초 비디오 + 도트 게이지)
     document.querySelectorAll('.hero-block[data-slider]').forEach((block) => {
       const layers = block.querySelectorAll('.hero-bg-layer');
       const dots = block.querySelectorAll('.slide-dot');
       const total = layers.length;
+      const DURATION = 10000;
       let current = 0;
       let timer = null;
 
-      // 첫 슬라이드(영상)는 8초, 일반 이미지 슬라이드는 4초
-      function getDuration(index) {
-        return index === 0 ? 8000 : 4000;
+      function startProgress(index) {
+        dots.forEach((dot) => {
+          const bar = dot.querySelector('.progress-bar');
+          if (bar) {
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+          }
+        });
+
+        const activeBar = dots[index]?.querySelector('.progress-bar');
+        if (activeBar) {
+          void activeBar.offsetWidth;
+          activeBar.style.transition = `width ${DURATION}ms linear`;
+          activeBar.style.width = '100%';
+        }
       }
 
       function goTo(index) {
-        const prevVideo = layers[current].querySelector('video');
+        const prevVideo = layers[current]?.querySelector('video');
         if (prevVideo) prevVideo.pause();
 
-        layers[current].classList.remove('active');
-        if (dots[current]) { dots[current].classList.remove('bg-white'); dots[current].classList.add('bg-white/30'); }
-        
+        layers[current]?.classList.remove('active');
         current = (index + total) % total;
-        
-        layers[current].classList.add('active');
-        if (dots[current]) { dots[current].classList.remove('bg-white/30'); dots[current].classList.add('bg-white'); }
+        layers[current]?.classList.add('active');
 
-        const currentVideo = layers[current].querySelector('video');
+        const currentVideo = layers[current]?.querySelector('video');
         if (currentVideo) {
           currentVideo.currentTime = 0;
           currentVideo.play().catch(() => {});
         }
 
+        startProgress(current);
         resetTimer();
       }
 
@@ -440,12 +530,14 @@
 
       function resetTimer() { 
         if (timer) clearTimeout(timer); 
-        timer = setTimeout(next, getDuration(current)); 
+        timer = setTimeout(next, DURATION); 
       }
       
+      startProgress(0);
       resetTimer();
 
       block.addEventListener('click', () => { next(); });
+
       dots.forEach((dot, index) => {
         dot.addEventListener('click', (e) => { 
           e.stopPropagation(); 
