@@ -83,28 +83,140 @@
     }
 
     /* ==========================================================================
-       [2] 아카이브 분할 스크롤 (모바일: 상하 50:50 / 데스크톱: 좌우 50:50)
+       [2] 아카이브 분할 스크롤 (모바일: 이미지 잘림 방지 듀얼 가로 스냅 / 데스크톱: 1:1 좌우 독립 스크롤)
        ========================================================================== */
     #archive-split-section {
       width: 100%;
-      height: 100dvh;
-      overflow: hidden;
+      background-color: #ffffff;
+      border-top: 1px solid #e5e5e5;
       position: relative;
     }
 
-    .split-scroll-col {
-      -webkit-overflow-scrolling: touch;
-      overflow-y: auto;
-      scrollbar-width: thin;
+    /* 모바일 (768px 미만): 50vh 세로 비율 보존 트랙 */
+    @media (max-width: 767px) {
+      #archive-split-section {
+        height: auto;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+      .mobile-track-container {
+        height: 50vh;
+        min-height: 360px;
+        max-height: 440px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 14px 0 14px 16px;
+        position: relative;
+      }
+      .mobile-track-container:first-child {
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .mobile-track-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 16px;
+        margin-bottom: 6px;
+        flex-shrink: 0;
+      }
+      .split-scroll-col {
+        display: flex;
+        flex-direction: row;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 16px;
+        flex: 1;
+        align-items: stretch;
+        scrollbar-width: none;
+      }
+      .split-scroll-col::-webkit-scrollbar {
+        display: none;
+      }
+      .split-scroll-col article {
+        flex: 0 0 66vw;
+        max-width: 250px;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      /* 모바일 이미지 프레임 (세로 4:5 비율로 잘림 방지) */
+      .archive-thumb-box {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        position: relative;
+        overflow: hidden;
+        background-color: #f7f7f7;
+        border-radius: 2px;
+      }
+      .archive-thumb-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
     }
-    .split-scroll-col.is-locked {
-      overflow-y: hidden !important;
-      pointer-events: none;
+
+    /* 데스크톱 (768px 이상): 1:1 좌우 독립 세로 분할 스크롤 */
+    @media (min-width: 768px) {
+      #archive-split-section {
+        height: 100dvh;
+        overflow: hidden;
+      }
+      .mobile-track-container {
+        width: 50%;
+        height: 100%;
+        padding: 0;
+      }
+      .mobile-track-container:first-child {
+        border-right: 1px solid #e5e5e5;
+        border-bottom: none;
+      }
+      .mobile-track-header {
+        display: none;
+      }
+      .split-scroll-col {
+        height: 100%;
+        overflow-y: auto;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .split-scroll-col.is-locked {
+        overflow-y: hidden !important;
+        pointer-events: none;
+      }
+      .split-scroll-col article {
+        width: 100%;
+      }
+      .archive-thumb-box {
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        background-color: #f7f7f7;
+      }
+      .archive-thumb-box.ratio-5-6 { aspect-ratio: 5 / 6; }
+      .archive-thumb-box.ratio-4-3 { aspect-ratio: 4 / 3; }
+      .archive-thumb-box.ratio-4-6 { aspect-ratio: 4 / 6; }
+      
+      .archive-thumb-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .split-scroll-col::-webkit-scrollbar { width: 3px; }
+      .split-scroll-col::-webkit-scrollbar-track { background: transparent; }
+      .split-scroll-col::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+      .split-scroll-col::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.35); }
     }
-    .split-scroll-col::-webkit-scrollbar { width: 3px; }
-    .split-scroll-col::-webkit-scrollbar-track { background: transparent; }
-    .split-scroll-col::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
-    .split-scroll-col::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.35); }
 
     /* ==========================================================================
        [3] 세련된 하이엔드 엔딩 크레딧 푸터 스타일
@@ -530,143 +642,127 @@
       </div>
     </section>
 
-    <!-- [2] 1:1 분할 스크롤 아카이브 섹션 (모바일: 상하 50:50 분할 / 데스크톱: 좌우 50:50 분할) -->
-    <section id="archive-split-section" class="w-full h-[100dvh] bg-white text-black border-t border-neutral-200 overflow-hidden relative">
+    <!-- [2] 아카이브 분할 섹션 (모바일: 잘림 없는 4:5 듀얼 가로 스냅 / PC: 1:1 좌우 독립 세로 스크롤) -->
+    <section id="archive-split-section" class="w-full text-black">
       <div class="w-full h-full flex flex-col md:flex-row">
 
-        <!-- 상단(모바일 50%) / 좌측(데스크톱 50%) 독립 스크롤 컬럼: Group 01 -->
-        <div class="split-scroll-col is-locked w-full md:w-1/2 h-1/2 md:h-full p-4 sm:p-6 md:p-8 flex flex-col space-y-10 md:space-y-16 border-b md:border-b-0 md:border-r border-neutral-200">
-          
-          <article class="flex flex-col space-y-3">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01</div>
-            <div class="w-full aspect-[5/6] bg-[#b36329] relative overflow-hidden flex items-center justify-center">
-              <img src="스크린샷 2026-09-10 173342.png" alt="Archive 01" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
-              <div class="sm:col-span-8 text-neutral-600 space-y-3">
-                <p class="font-medium text-neutral-900 leading-snug">
-                  Hamish Fulton, Nepal<br>
-                  Exhibition Catalog<br>
-                  Van Abbemuseum, Eindhoven<br>
-                  1977
-                </p>
-                <p class="text-[11px] text-neutral-500 leading-normal">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
-                </p>
-              </div>
-            </div>
-          </article>
+        <!-- [TOP / LEFT TRACK] Group 01 -->
+        <div class="mobile-track-container">
+          <div class="mobile-track-header">
+            <span class="font-mono-custom text-[11px] text-neutral-500 uppercase tracking-wider">Group 01</span>
+            <span class="text-[10px] font-mono-custom text-neutral-400 tracking-widest">SWIPE ➔</span>
+          </div>
 
-          <article class="flex flex-col space-y-3">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 02</div>
-            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-              <img src="a607d743-2389-4681-a003-0a283ea042ac.jpg" alt="Archive 02" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Spatial Object 04</div>
-              <div class="sm:col-span-8 text-neutral-600 space-y-3">
-                <p class="font-medium text-neutral-900 leading-snug">
-                  Architectural Monograph<br>
-                  Berlin Archive Series<br>
-                  1982
-                </p>
-                <p class="text-[11px] text-neutral-500 leading-normal">
-                  Curated documentation of minimalist geometric objects and landscape interactions.
-                </p>
+          <div class="split-scroll-col is-locked">
+            
+            <article>
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01</div>
+              <div class="archive-thumb-box ratio-5-6 bg-[#b36329]">
+                <img src="스크린샷 2026-09-10 173342.png" alt="Archive 01" class="contrast-125">
               </div>
-            </div>
-          </article>
-
-          <article class="flex flex-col space-y-3 pb-10 md:pb-16">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 03</div>
-            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-              <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Edition Vercors</div>
-              <div class="sm:col-span-8 text-neutral-600">
-                <p class="font-medium text-neutral-900 leading-snug">Original Print Series / 1991</p>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Hamish Fulton, Nepal</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Exhibition Catalog / 1977</p>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
+            <article>
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01 / Sub 02</div>
+              <div class="archive-thumb-box ratio-4-3 border border-neutral-200">
+                <img src="a607d743-2389-4681-a003-0a283ea042ac.jpg" alt="Archive 02" class="contrast-125">
+              </div>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Spatial Object 04</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Berlin Archive Series / 1982</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="pb-0 md:pb-16">
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01 / Sub 03</div>
+              <div class="archive-thumb-box ratio-4-3 border border-neutral-200">
+                <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03">
+              </div>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Edition Vercors</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Original Print Series / 1991</p>
+                </div>
+              </div>
+            </article>
+
+          </div>
         </div>
 
-        <!-- 하단(모바일 50%) / 우측(데스크톱 50%) 독립 스크롤 컬럼: Group 02 -->
-        <div class="split-scroll-col is-locked w-full md:w-1/2 h-1/2 md:h-full p-4 sm:p-6 md:p-8 flex flex-col space-y-10 md:space-y-16">
-          
-          <article class="flex flex-col space-y-3">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02</div>
-            <div class="w-full aspect-[5/6] relative overflow-hidden bg-neutral-900 border border-neutral-300/40 group">
-              <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Mountain Walk" class="w-full h-full object-cover contrast-110 group-hover:scale-105 transition-transform duration-700">
-              <div class="absolute inset-y-0 left-2 sm:left-4 flex items-center pointer-events-none">
-                <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
-                  A TEN DAY CIRCULAR WALK NOVEMBER FULL MOON VERCORS FRANCE 1993
-                </span>
-              </div>
-              <div class="absolute inset-y-0 right-2 sm:right-4 flex items-center pointer-events-none">
-                <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] drop-shadow-md">
-                  A TEN DAY CIRCULAR WALK DECEMBER FULL MOON VERCORS FRANCE 1995
-                </span>
-              </div>
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
-              <div class="sm:col-span-8 text-neutral-600 space-y-3">
-                <p class="font-medium text-neutral-900 leading-snug">
-                  Hamish Fulton<br>
-                  Exhibition card<br>
-                  Le Musée de Valence<br>
-                  1996
-                </p>
-                <p class="text-[11px] text-neutral-500 leading-normal">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
-                </p>
-              </div>
-            </div>
-          </article>
+        <!-- [BOTTOM / RIGHT TRACK] Group 02 -->
+        <div class="mobile-track-container">
+          <div class="mobile-track-header">
+            <span class="font-mono-custom text-[11px] text-neutral-500 uppercase tracking-wider">Group 02</span>
+            <span class="text-[10px] font-mono-custom text-neutral-400 tracking-widest">SWIPE ➔</span>
+          </div>
 
-          <article class="flex flex-col space-y-3">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 02</div>
-            <div class="w-full aspect-[4/6] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-              <img src="639a6bc5427e9555a56979ce2d955074.jpg" alt="Archive 05" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Winter Horizon</div>
-              <div class="sm:col-span-8 text-neutral-600 space-y-3">
-                <p class="font-medium text-neutral-900 leading-snug">
-                  Photographic Studies<br>
-                  Nordic Art Foundation<br>
-                  1999
-                </p>
-                <p class="text-[11px] text-neutral-500 leading-normal">
-                  Exploration of northern hemisphere light temperatures and seasonal textures.
-                </p>
+          <div class="split-scroll-col is-locked">
+            
+            <article>
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 02</div>
+              <div class="archive-thumb-box ratio-5-6 bg-neutral-900 border border-neutral-300/40">
+                <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Mountain Walk" class="contrast-110">
+                <div class="absolute inset-y-0 left-1.5 md:left-4 flex items-center pointer-events-none">
+                  <span class="font-mono text-[7px] md:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
+                    A TEN DAY CIRCULAR WALK 1993
+                  </span>
+                </div>
+                <div class="absolute inset-y-0 right-1.5 md:right-4 flex items-center pointer-events-none">
+                  <span class="font-mono text-[7px] md:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] drop-shadow-md">
+                    A TEN DAY CIRCULAR WALK 1995
+                  </span>
+                </div>
               </div>
-            </div>
-          </article>
-
-          <article class="flex flex-col space-y-3 pb-10 md:pb-16">
-            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 03</div>
-            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-              <img src="https://picsum.photos/seed/arch-right-3/1200/900" alt="Archive 06" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700">
-            </div>
-            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-              <div class="sm:col-span-4 font-semibold text-neutral-900">Retrospective Book</div>
-              <div class="sm:col-span-8 text-neutral-600">
-                <p class="font-medium text-neutral-900 leading-snug">Limited Edition Print (100 Copies)</p>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Mountain Walk Series</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Le Musée de Valence / 1996</p>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
+            <article>
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 02 / Sub 02</div>
+              <div class="archive-thumb-box ratio-4-6 border border-neutral-200">
+                <img src="639a6bc5427e9555a56979ce2d955074.jpg" alt="Archive 05">
+              </div>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Winter Horizon</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Nordic Art Foundation / 1999</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="pb-0 md:pb-16">
+              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 02 / Sub 03</div>
+              <div class="archive-thumb-box ratio-4-3 border border-neutral-200">
+                <img src="https://picsum.photos/seed/arch-right-3/1200/900" alt="Archive 06" class="grayscale">
+              </div>
+              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
+                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Retrospective Book</div>
+                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
+                  <p class="font-medium text-neutral-800">Limited Edition / 100 Copies</p>
+                </div>
+              </div>
+            </article>
+
+          </div>
         </div>
 
       </div>
 
       <!-- 최상단 이동 버튼 -->
-      <button id="back-to-top" aria-label="최상단으로 이동" class="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/60 hover:bg-white/90 backdrop-blur-xl border border-white/80 text-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.08)] flex items-center justify-center opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 group focus:outline-none">
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:-translate-y-0.5 text-neutral-700 group-hover:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button id="back-to-top" aria-label="최상단으로 이동" class="fixed md:absolute bottom-5 sm:bottom-7 right-5 md:right-auto md:left-1/2 md:-translate-x-1/2 z-30 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-white/70 hover:bg-white backdrop-blur-xl border border-neutral-200/80 text-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex items-center justify-center opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:scale-110 active:scale-95 group focus:outline-none">
+        <svg class="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5 text-neutral-700 group-hover:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11l7-7m0 0l7 7m-7-7v16"></path>
         </svg>
       </button>
@@ -798,7 +894,6 @@
        [VIEW 2] 스토어 페이지
        ========================================================================== -->
   <div id="store-view">
-    <!-- 스토어 헤더 -->
     <header class="yung-header" id="storeHeader">
       <div class="header-center-group">
         <button class="header-btn" id="storeHamburgerBtn" aria-label="메뉴 열기">
@@ -822,7 +917,6 @@
       </div>
     </header>
 
-    <!-- 햄버거 모달 -->
     <div class="menu-modal" id="storeMenuModal">
       <div class="swatch-grid" id="menuSwatches"></div>
       <div class="menu-footer">
@@ -849,14 +943,12 @@
       </div>
     </div>
 
-    <!-- 카트 드로어 -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <aside class="cart-drawer" id="cartDrawer">
       <button class="cart-close-btn" id="cartCloseBtn">✕</button>
       <div class="cart-empty-message">Cart is empty</div>
     </aside>
 
-    <!-- 메인 카탈로그 뷰 -->
     <main id="catalogView">
       <section class="grid-row-2" id="mainRow1"></section>
       <section class="grid-row-4" id="mainRow2"></section>
@@ -882,7 +974,6 @@
       </footer>
     </main>
 
-    <!-- 상품 상세 뷰 (PDP) -->
     <main id="productView" style="display: none;">
       <section class="product-hero">
         <div class="hero-image-wrap">
@@ -1015,7 +1106,7 @@
     }
 
     /* --------------------------------------------------
-       [2] 랜딩 페이지 & 스크롤 제어 로직 (모바일/PC 공통 독립 분할)
+       [2] 랜딩 페이지 & 스크롤 제어 로직
        -------------------------------------------------- */
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const drawerCloseBtn = document.getElementById('drawer-close-btn');
@@ -1040,7 +1131,7 @@
     const mainHeader = document.getElementById('main-header');
     let lastLandingScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
-    // 아카이브 섹션 뷰포트 진입 감지 및 컬럼 스크롤 잠금/해제 (모바일/PC 공통)
+    // 데스크톱 전용 스크롤 잠금/해제
     const archiveSection = document.getElementById('archive-split-section');
     const splitCols = document.querySelectorAll('.split-scroll-col');
     const backToTopBtn = document.getElementById('back-to-top');
@@ -1048,9 +1139,15 @@
 
     function checkArchiveLockState() {
       if (!archiveSection || landingView.style.display === 'none') return;
-      const rect = archiveSection.getBoundingClientRect();
       
-      // 섹션 상단이 뷰포트 상단에 도달하면 분할 컬럼들(모바일: 상/하, PC: 좌/우) 스크롤 활성화
+      // 모바일(768px 미만)에서는 세로 락을 해제하여 전체 페이지 스크롤이 매끄럽게 동작
+      if (window.innerWidth < 768) {
+        splitCols.forEach(col => col.classList.remove('is-locked'));
+        return;
+      }
+
+      // 데스크톱(768px 이상): 아카이브 섹션 도달 시 락 해제
+      const rect = archiveSection.getBoundingClientRect();
       if (Math.abs(rect.top) <= 15) {
         splitCols.forEach(col => col.classList.remove('is-locked'));
       } else {
@@ -1058,7 +1155,7 @@
       }
     }
 
-    // 헤더 노출 제어
+    // 헤더 및 모바일 Top 버튼 제어
     window.addEventListener('scroll', () => {
       if (landingView.style.display === 'none') return;
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -1070,15 +1167,26 @@
 
       lastLandingScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
       checkArchiveLockState();
+
+      // 모바일 Back to Top 버튼 노출
+      if (window.innerWidth < 768) {
+        if (currentScrollY > 400) {
+          backToTopBtn.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+          backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        } else {
+          backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+          backToTopBtn.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+        }
+      }
     }, { passive: true });
 
-    // 스마트 휠 스냅 (PC)
+    // 데스크톱 스마트 휠 스냅 (PC 전용)
     window.addEventListener('wheel', (e) => {
-      if (landingView.style.display === 'none' || isTransitioning) return;
+      if (landingView.style.display === 'none' || isTransitioning || window.innerWidth < 768) return;
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
       const archiveTop = archiveSection.offsetTop;
 
-      // 1. 영상 섹션에서 아래로 휠 시 -> 아카이브 섹션으로 정확히 스냅 이동
+      // 1. 메인 영상에서 아래로 휠 굴릴 시 -> 아카이브 섹션으로 정확히 이동
       if (currentScrollY < archiveTop - 15 && e.deltaY > 0) {
         e.preventDefault();
         isTransitioning = true;
@@ -1086,7 +1194,7 @@
         setTimeout(() => { isTransitioning = false; checkArchiveLockState(); }, 600);
       }
       
-      // 2. 아카이브 최상단에서 위로 휠 시 -> 메인 영상 섹션으로 복귀
+      // 2. 아카이브 최상단에서 위로 휠 굴릴 시 -> 메인 영상으로 복귀
       let allAtTop = true;
       splitCols.forEach(col => { if (col.scrollTop > 5) allAtTop = false; });
       if (Math.abs(currentScrollY - archiveTop) <= 15 && allAtTop && e.deltaY < 0) {
@@ -1098,8 +1206,9 @@
       }
     }, { passive: false });
 
-    // 분할 컬럼 스크롤 감지 (Back To Top 버튼 제어)
+    // 데스크톱 컬럼 하단 도달 시 Top 버튼 제어
     function checkSplitScrollBottom() {
+      if (window.innerWidth < 768) return;
       let reachedBottom = false;
       splitCols.forEach(col => {
         if (col.scrollTop + col.clientHeight >= col.scrollHeight - 40) {
@@ -1123,7 +1232,9 @@
     if (backToTopBtn) {
       backToTopBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        splitCols.forEach(col => { col.scrollTo({ top: 0, behavior: 'smooth' }); });
+        if (window.innerWidth >= 768) {
+          splitCols.forEach(col => { col.scrollTo({ top: 0, behavior: 'smooth' }); });
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
