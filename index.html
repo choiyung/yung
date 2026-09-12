@@ -7,71 +7,60 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>YUNG</title>
 
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* [기본 리셋 및 타이포그래피] */
-    html, body { width: 100%; height: 100%; margin: 0; padding: 0; scroll-behavior: smooth; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    /* ==========================================================================
+       [1] 공통 & 메인 랜딩 페이지 스타일
+       ========================================================================== */
+    html, body { width: 100%; min-height: 100%; margin: 0; padding: 0; scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
     .font-display { font-family: 'Montserrat', sans-serif; }
     .font-mono-custom { font-family: 'Space Mono', monospace; }
 
-    /* [1. 인트로 스플래시 화면] */
+    /* 인트로 스플래시 화면 */
     #splash-screen {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      width: 100vw; height: 100vh; height: 100dvh; height: -webkit-fill-available;
+      width: 100vw; height: 100vh; height: 100dvh;
       background-color: #ffffff; z-index: 999999;
       display: flex; align-items: center; justify-content: center;
       animation: splashSequence 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: opacity, visibility;
     }
     @keyframes splashSequence {
-      0% { opacity: 1; visibility: visible; }
-      75% { opacity: 1; visibility: visible; }
+      0%, 75% { opacity: 1; visibility: visible; }
       100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
     @keyframes logoZoom {
       0% { transform: scale(0.95); opacity: 0; }
-      25% { transform: scale(1); opacity: 1; }
-      75% { transform: scale(1); opacity: 1; }
+      25%, 75% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.04); opacity: 0; }
     }
     #splash-logo { animation: logoZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-    /* [2. 헤더 인터랙션 스타일] */
+    /* 랜딩 헤더 인터랙션 */
     .nav-fade-target {
       opacity: 0; transform: translateY(-6px);
       transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
     }
-    header:hover .nav-fade-target, header.is-revealed .nav-fade-target { opacity: 1; transform: translateY(0); }
-    header:hover .nav-guide-line, header.is-revealed .nav-guide-line { opacity: 0; }
+    #main-header:hover .nav-fade-target, #main-header.is-revealed .nav-fade-target { opacity: 1; transform: translateY(0); }
+    #main-header:hover .nav-guide-line, #main-header.is-revealed .nav-guide-line { opacity: 0; }
 
-    /* [3. 1/3 사이드 드로어 메뉴 스타일] */
-    #drawer-backdrop {
-      transition: opacity 0.35s ease, visibility 0.35s ease;
-    }
-    #drawer-backdrop.is-open {
-      opacity: 1; visibility: visible; pointer-events: auto;
-    }
-    #drawer-backdrop:not(.is-open) {
-      opacity: 0; visibility: hidden; pointer-events: none;
-    }
+    /* 랜딩 1/3 사이드 드로어 메뉴 */
+    #drawer-backdrop { transition: opacity 0.35s ease, visibility 0.35s ease; }
+    #drawer-backdrop.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
+    #drawer-backdrop:not(.is-open) { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    #mobile-drawer {
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-    }
-    #mobile-drawer.is-open {
-      transform: translateX(0); opacity: 1; pointer-events: auto;
-    }
-    #mobile-drawer:not(.is-open) {
-      transform: translateX(-100%); opacity: 0; pointer-events: none;
-    }
+    #mobile-drawer { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease; }
+    #mobile-drawer.is-open { transform: translateX(0); opacity: 1; pointer-events: auto; }
+    #mobile-drawer:not(.is-open) { transform: translateX(-100%); opacity: 0; pointer-events: none; }
 
-    /* [4. 풀스크린 히어로 슬라이더 블록] */
+    /* 풀스크린 히어로 슬라이더 블록 */
     .hero-block { position: relative; width: 100%; height: 100dvh; overflow: hidden; background-color: #0e0e0e; cursor: pointer; }
     .hero-image-container { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-bg-layer {
@@ -80,339 +69,712 @@
       transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1), transform 4s ease-out;
       will-change: opacity, transform; pointer-events: none;
     }
-    .hero-bg-layer video {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center;
-    }
+    .hero-bg-layer video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
     .hero-bg-layer.active { opacity: 1; transform: scale(1); z-index: 1; pointer-events: auto; }
 
     /* 슬라이드 도트 프로그레스 게이지 */
     .slide-dot {
-      cursor: pointer;
-      position: relative;
-      height: 2px;
-      background-color: rgba(255, 255, 255, 0.25);
-      overflow: hidden;
-      border-radius: 9999px;
+      cursor: pointer; position: relative; height: 2px;
+      background-color: rgba(255, 255, 255, 0.25); overflow: hidden; border-radius: 9999px;
     }
     .slide-dot .progress-bar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background-color: #ffffff;
-      border-radius: 9999px;
-      will-change: width;
+      position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+      background-color: #ffffff; border-radius: 9999px; will-change: width;
     }
 
-    /* [5. 독립 스크롤바 미니멀 커스텀] */
-    .split-scroll-col {
-      -webkit-overflow-scrolling: touch;
+    /* 독립 스크롤바 미니멀 커스텀 */
+    .split-scroll-col { -webkit-overflow-scrolling: touch; }
+    .split-scroll-col::-webkit-scrollbar { width: 3px; }
+    .split-scroll-col::-webkit-scrollbar-track { background: transparent; }
+    .split-scroll-col::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+    .split-scroll-col::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.35); }
+
+    /* ==========================================================================
+       [2] 스토어 페이지 격리 스타일
+       ========================================================================== */
+    #store-view {
+      display: none;
+      background-color: #ffffff;
+      color: #111111;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      width: 100%;
     }
-    .split-scroll-col::-webkit-scrollbar {
-      width: 3px;
+
+    /* Tailwind 이미지 기본 리셋 방어 */
+    #store-view img {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      object-fit: cover !important;
     }
-    .split-scroll-col::-webkit-scrollbar-track {
-      background: transparent;
+
+    #store-view a { color: inherit; text-decoration: none; }
+    #store-view button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+    /* 스토어 중앙 집중형 헤더 */
+    .yung-header {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      mix-blend-mode: difference; color: #ffffff; padding: 18px 0;
+      display: flex; justify-content: center; align-items: center;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none; will-change: transform;
     }
-    .split-scroll-col::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.15);
-      border-radius: 10px;
+    .yung-header.nav-hidden { transform: translateY(-100%); }
+
+    .header-center-group {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 64px; pointer-events: auto;
     }
-    .split-scroll-col::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.35);
+    .header-btn {
+      color: #ffffff; padding: 6px; cursor: pointer; transition: opacity 0.2s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-btn:hover { opacity: 0.65; }
+
+    .hamburger-icon {
+      width: 19px; height: 13px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hamburger-icon span { display: block; width: 100%; height: 2px; background-color: #ffffff; }
+
+    .cart-bag-icon { width: 18px; height: 20px; position: relative; display: inline-block; }
+
+    /* 햄버거 드롭다운 모달 메뉴 */
+    .menu-modal {
+      position: fixed; top: 64px; left: 50%; transform: translateX(-50%);
+      width: 300px; background: #ffffff; border: 1px solid #000000;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12); display: none; flex-direction: column; z-index: 1001;
+    }
+    .menu-modal.active { display: flex; }
+    .swatch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 16px; }
+    .swatch-item {
+      width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f0f0f0;
+      border: 1px solid #e2e2e2; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .swatch-item:hover { transform: scale(1.05); border-color: #000000; }
+    .menu-footer {
+      border-top: 1px solid #000000; padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; font-size: 9.5px; line-height: 1.45; color: #333;
+    }
+    .menu-footer h4 { font-size: 10px; font-weight: 600; margin-bottom: 6px; color: #000; }
+    .menu-footer-section { margin-bottom: 10px; }
+
+    /* 사이드 카트 슬라이드 패널 */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45);
+      z-index: 2000; display: none; opacity: 0; transition: opacity 0.25s ease;
+    }
+    .cart-overlay.active { display: block; opacity: 1; }
+    .cart-drawer {
+      position: fixed; top: 0; right: -100%; width: 32vw; min-width: 320px; height: 100vh;
+      background: #ffffff; z-index: 2001; transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column; padding: 24px;
+    }
+    .cart-drawer.active { right: 0; }
+    .cart-close-btn {
+      align-self: flex-end; width: 26px; height: 26px; border-radius: 50%;
+      background: #d8d8d8; font-size: 14px; font-weight: 600; cursor: pointer; color: #555;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-empty-message { margin: auto; font-size: 13px; color: #333; }
+
+    /* 메인 카탈로그 그리드 뷰 */
+    .grid-row-2 { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e2e2e2; }
+    .grid-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #e2e2e2; }
+    .grid-card {
+      border-right: 1px solid #e2e2e2; display: flex; flex-direction: column; cursor: pointer;
+      background: #ffffff; position: relative;
+    }
+    .grid-card:last-child { border-right: none; }
+    .grid-card .image-wrap { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f7f7f7; }
+    .grid-card .image-wrap img { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .grid-card:hover .image-wrap img { transform: scale(1.025); }
+    .card-meta {
+      border-top: 1px solid #e2e2e2; padding: 10px 14px; font-size: 9.5px;
+      text-transform: uppercase; letter-spacing: 0.02em;
+    }
+    .card-meta .meta-name { color: #111; font-weight: 500; }
+    .card-meta .meta-price { color: #888; margin-top: 2px; }
+    .card-meta .original-price { text-decoration: line-through; margin-right: 4px; }
+
+    /* 상품 상세 페이지 (PDP) */
+    .product-hero {
+      min-height: 90vh; display: flex; align-items: center; justify-content: center;
+      padding: 70px 20px 40px; background: #ffffff;
+    }
+    .hero-image-wrap {
+      width: min(85vw, 680px); aspect-ratio: 1 / 1; max-height: 75vh;
+      overflow: hidden; background-color: #f7f7f7; border: 1px solid #e2e2e2;
+    }
+    .product-action-bar {
+      position: sticky; bottom: 0; z-index: 500; display: grid; grid-template-columns: 1fr 1fr 2fr;
+      background: #ffffff; border-top: 1px solid #e2e2e2; border-bottom: 1px solid #e2e2e2; font-size: 11px;
+    }
+    .bar-col-name { padding: 14px 18px; border-right: 1px solid #e2e2e2; display: flex; align-items: center; font-weight: 500; }
+    .bar-col-details { padding: 14px 18px; border-right: 1px solid #e2e2e2; display: flex; align-items: center; cursor: pointer; }
+    .bar-col-details:hover { background: #f8f8f8; }
+    .bar-col-cart {
+      background: #111111; color: #ffffff; padding: 14px 20px; display: flex;
+      justify-content: space-between; align-items: center; font-weight: 600; cursor: pointer;
+    }
+    .bar-col-cart:hover { opacity: 0.9; }
+
+    .detail-section { background: #ffffff; }
+    .detail-row { border-bottom: 1px solid #e2e2e2; display: grid; font-size: 11px; line-height: 1.6; }
+    .detail-row.split-2 { grid-template-columns: 1fr 1fr; }
+    .detail-row.split-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .detail-box { padding: 24px 20px; border-right: 1px solid #e2e2e2; }
+    .detail-box:last-child { border-right: none; }
+    .detail-box h4 { font-size: 11px; font-weight: 600; margin-bottom: 12px; color: #000; }
+    .detail-box ul { list-style: none; padding: 0; margin: 0; }
+    .detail-box ul li { position: relative; padding-left: 12px; margin-bottom: 4px; }
+    .detail-box ul li::before { content: '•'; position: absolute; left: 0; }
+
+    .thumb-group { display: flex; gap: 12px; }
+    .thumb-item {
+      width: 76px; height: 76px; overflow: hidden; background: #f0f0f0;
+      border: 1px solid #e2e2e2; cursor: pointer; transition: all 0.2s ease;
+    }
+    .thumb-item:hover { border-color: #000000; }
+    .thumb-item.active-thumb { border: 2px solid #000000; transform: scale(0.96); }
+    .spec-block { margin-bottom: 14px; }
+
+    .similar-row-header {
+      border-bottom: 1px solid #e2e2e2; padding: 12px 20px; display: flex;
+      justify-content: space-between; font-size: 11px; font-weight: 500;
+    }
+    .similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid #e2e2e2; }
+    .similar-item { padding: 20px; border-right: 1px solid #e2e2e2; cursor: pointer; }
+    .similar-item:last-child { border-right: none; }
+    .similar-item .image-wrap { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f7f7f7; }
+
+    .site-footer-store {
+      border-top: 1px solid #e2e2e2; padding: 28px 24px 48px; display: grid;
+      grid-template-columns: repeat(4, 1fr); gap: 20px; font-size: 9.5px; line-height: 1.5; color: #444;
+    }
+    .site-footer-store h4 { font-size: 10px; font-weight: 600; color: #000; margin-bottom: 8px; }
+
+    @media (max-width: 800px) {
+      .header-center-group { gap: 36px; }
+      .menu-modal { left: 20px; right: 20px; width: auto; transform: none; }
+      .grid-row-2, .grid-row-4 { grid-template-columns: 1fr 1fr; }
+      .site-footer-store { grid-template-columns: 1fr 1fr; }
+      .detail-row.split-2, .detail-row.split-3 { grid-template-columns: 1fr; }
+      .detail-box { border-right: none; border-bottom: 1px solid #e2e2e2; }
+      .product-action-bar { grid-template-columns: 1fr 1fr; }
+      .bar-col-name { display: none; }
+      .cart-drawer { width: 85vw; }
     }
   </style>
   <link rel="shortcut icon" type="image" href="로고.png">
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-black selection:text-white">
 
-  <!-- 1. [인트로 스플래시 화면] -->
+  <!-- [인트로 스플래시 화면] -->
   <div id="splash-screen" class="pointer-events-none">
     <div id="splash-logo" class="font-display text-6xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] text-black select-none">YUNG</div>
   </div>
 
-  <!-- 2. [고정 헤더] -->
-  <header id="main-header" class="group fixed top-0 left-0 w-full z-50 bg-transparent py-4 sm:py-6 select-none transition-all duration-300 mix-blend-difference is-revealed">
-    <div class="w-full px-3 sm:px-6 md:px-8 flex items-center justify-between">
+  <!-- ==========================================================================
+       [VIEW 1] 메인 랜딩 페이지
+       ========================================================================== -->
+  <div id="landing-view">
+    <!-- 고정 헤더 -->
+    <header id="main-header" class="group fixed top-0 left-0 w-full z-50 bg-transparent py-4 sm:py-6 select-none transition-all duration-300 mix-blend-difference is-revealed">
+      <div class="w-full px-3 sm:px-6 md:px-8 flex items-center justify-between">
+        <!-- 좌측: 햄버거 메뉴 버튼 -->
+        <div class="flex items-center flex-1 nav-fade-target">
+          <button id="hamburger-btn" aria-label="메뉴 열기" class="text-white hover:text-white/70 p-1.5 -ml-1 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5"></path>
+            </svg>
+          </button>
+        </div>
 
-      <!-- 좌측: 햄버거 메뉴 버튼 -->
-      <div class="flex items-center flex-1 nav-fade-target">
-        <button id="hamburger-btn" aria-label="메뉴 열기" class="text-white hover:text-white/70 p-1.5 -ml-1 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5"></path>
-          </svg>
-        </button>
+        <!-- 중앙: 브랜드 로고 -->
+        <div class="nav-fade-target flex justify-center items-center">
+          <a href="#" class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">YUNG</a>
+        </div>
+
+        <!-- 우측 아이콘 -->
+        <div class="flex items-center justify-end space-x-4 sm:space-x-6 text-white/90 nav-fade-target flex-1 -mr-1">
+          <button aria-label="검색" class="p-1 hover:text-white transition-colors duration-200">
+            <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" stroke-width="1.8"></circle>
+              <path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"></path>
+            </svg>
+          </button>
+          <a href="#" aria-label="마이페이지" class="p-1 hover:text-white transition-colors duration-200">
+            <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="3.5" stroke-width="1.8"></circle>
+              <path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a href="javascript:void(0)" onclick="navigateToStore()" aria-label="장바구니" class="p-1 hover:text-white transition-colors duration-200">
+            <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="9.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"></circle>
+              <circle cx="17.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"></circle>
+            </svg>
+          </a>
+        </div>
       </div>
+      <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
+    </header>
 
-      <!-- 중앙: 브랜드 로고 -->
-      <div class="nav-fade-target flex justify-center items-center">
-        <a href="#" class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200">YUNG</a>
-      </div>
-
-      <!-- 우측 아이콘 -->
-      <div class="flex items-center justify-end space-x-4 sm:space-x-6 text-white/90 nav-fade-target flex-1 -mr-1">
-        <button aria-label="검색" class="p-1 hover:text-white transition-colors duration-200">
-          <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="7" stroke-width="1.8"></circle>
-            <path d="M21 21l-4.35-4.35" stroke-width="1.8" stroke-linecap="round"></path>
-          </svg>
-        </button>
-        <a href="#" aria-label="마이페이지" class="p-1 hover:text-white transition-colors duration-200">
-          <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="3.5" stroke-width="1.8"></circle>
-            <path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-        </a>
-        <a href="#" aria-label="장바구니" class="p-1 hover:text-white transition-colors duration-200">
-          <svg class="w-[21px] h-[21px] sm:w-[22px] sm:h-[22px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-            <circle cx="9.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"></circle>
-            <circle cx="17.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"></circle>
-          </svg>
-        </a>
-      </div>
-
-    </div>
-    <div class="nav-guide-line absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-6 sm:w-8 h-[2px] bg-white/25 rounded-full transition-opacity duration-300"></div>
-  </header>
-
-  <!-- 3. [1/3 불투명 사이드 내비게이션 드로어 & 백드롭] -->
-  <div id="drawer-backdrop" class="fixed inset-0 z-[9998] bg-black/20 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"></div>
-  
-  <aside id="mobile-drawer" class="fixed top-0 left-0 w-full sm:w-[380px] md:w-1/3 h-[100dvh] z-[9999] bg-white/95 backdrop-blur-2xl text-neutral-900 border-r border-neutral-200/80 shadow-2xl flex flex-col justify-between p-6 sm:p-8 md:p-10 -translate-x-full opacity-0 pointer-events-none">
+    <!-- 1/3 사이드 드로어 네비게이션 -->
+    <div id="drawer-backdrop" class="fixed inset-0 z-[9998] bg-black/20 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"></div>
     
-    <!-- 드로어 상단 -->
-    <div class="flex items-center justify-between pb-4 border-b border-neutral-100">
-      <span class="font-display text-xl font-black tracking-[-0.07em] text-neutral-900">YUNG</span>
-      <button id="drawer-close-btn" aria-label="메뉴 닫기" class="p-1.5 text-neutral-500 hover:text-black transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"></path>
+    <aside id="mobile-drawer" class="fixed top-0 left-0 w-full sm:w-[380px] md:w-1/3 h-[100dvh] z-[9999] bg-white/95 backdrop-blur-2xl text-neutral-900 border-r border-neutral-200/80 shadow-2xl flex flex-col justify-between p-6 sm:p-8 md:p-10 -translate-x-full opacity-0 pointer-events-none">
+      <div class="flex items-center justify-between pb-4 border-b border-neutral-100">
+        <span class="font-display text-xl font-black tracking-[-0.07em] text-neutral-900">YUNG</span>
+        <button id="drawer-close-btn" aria-label="메뉴 닫기" class="p-1.5 text-neutral-500 hover:text-black transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="flex flex-col space-y-5 my-auto py-6">
+        <a href="javascript:void(0)" onclick="navigateToStore()" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Store</a>
+        <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Archive</a>
+        <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Object</a>
+        <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Exhibition</a>
+        <a href="#" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">About</a>
+      </nav>
+
+      <div class="flex justify-between items-center pt-5 border-t border-neutral-100 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-400">
+        <a href="#" class="hover:text-neutral-900 transition-colors">Instagram</a>
+        <span>© 2026 YUNG</span>
+      </div>
+    </aside>
+
+    <!-- 메인 풀스크린 히어로 슬라이더 -->
+    <section class="w-full">
+      <div class="hero-block" data-slider>
+        <div class="hero-image-container">
+          <div class="hero-bg-layer active">
+            <video autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover">
+              <source src="비디우.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="hero-bg-layer">
+            <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
+              <source src="비디우3.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="hero-bg-layer">
+            <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
+              <source src="비디우2.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
+
+        <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 sm:gap-4">
+          <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="0">
+            <div class="progress-bar"></div>
+          </div>
+          <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="1">
+            <div class="progress-bar"></div>
+          </div>
+          <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="2">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1:1 좌우 독립 분할 스크롤 아카이브 섹션 -->
+    <section id="archive-split-section" class="w-full h-[100dvh] bg-white text-black border-t border-neutral-200 overflow-hidden relative">
+      <div class="w-full h-full flex flex-col md:flex-row">
+
+        <!-- 좌측 컬럼 -->
+        <div class="split-scroll-col w-full md:w-1/2 h-full overflow-y-auto p-4 sm:p-6 md:p-8 flex flex-col space-y-16 border-b md:border-b-0 md:border-r border-neutral-200">
+          
+          <article class="flex flex-col space-y-3">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01</div>
+            <div class="w-full aspect-[5/6] bg-[#b36329] relative overflow-hidden flex items-center justify-center">
+              <img src="스크린샷 2026-09-10 173342.png" alt="Archive 01" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
+              <div class="sm:col-span-8 text-neutral-600 space-y-3">
+                <p class="font-medium text-neutral-900 leading-snug">
+                  Hamish Fulton, Nepal<br>
+                  Exhibition Catalog<br>
+                  Van Abbemuseum, Eindhoven<br>
+                  1977
+                </p>
+                <p class="text-[11px] text-neutral-500 leading-normal">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex flex-col space-y-3">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 02</div>
+            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
+              <img src="a607d743-2389-4681-a003-0a283ea042ac.jpg" alt="Archive 02" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Spatial Object 04</div>
+              <div class="sm:col-span-8 text-neutral-600 space-y-3">
+                <p class="font-medium text-neutral-900 leading-snug">
+                  Architectural Monograph<br>
+                  Berlin Archive Series<br>
+                  1982
+                </p>
+                <p class="text-[11px] text-neutral-500 leading-normal">
+                  Curated documentation of minimalist geometric objects and landscape interactions.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex flex-col space-y-3 pb-16">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 03</div>
+            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
+              <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Edition Vercors</div>
+              <div class="sm:col-span-8 text-neutral-600">
+                <p class="font-medium text-neutral-900 leading-snug">Original Print Series / 1991</p>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- 우측 컬럼 -->
+        <div class="split-scroll-col w-full md:w-1/2 h-full overflow-y-auto p-4 sm:p-6 md:p-8 flex flex-col space-y-16">
+          
+          <article class="flex flex-col space-y-3">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02</div>
+            <div class="w-full aspect-[5/6] relative overflow-hidden bg-neutral-900 border border-neutral-300/40 group">
+              <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Mountain Walk" class="w-full h-full object-cover contrast-110 group-hover:scale-105 transition-transform duration-700">
+              <div class="absolute inset-y-0 left-2 sm:left-4 flex items-center pointer-events-none">
+                <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
+                  A TEN DAY CIRCULAR WALK NOVEMBER FULL MOON VERCORS FRANCE 1993
+                </span>
+              </div>
+              <div class="absolute inset-y-0 right-2 sm:right-4 flex items-center pointer-events-none">
+                <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] drop-shadow-md">
+                  A TEN DAY CIRCULAR WALK DECEMBER FULL MOON VERCORS FRANCE 1995
+                </span>
+              </div>
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
+              <div class="sm:col-span-8 text-neutral-600 space-y-3">
+                <p class="font-medium text-neutral-900 leading-snug">
+                  Hamish Fulton<br>
+                  Exhibition card<br>
+                  Le Musée de Valence<br>
+                  1996
+                </p>
+                <p class="text-[11px] text-neutral-500 leading-normal">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex flex-col space-y-3">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 02</div>
+            <div class="w-full aspect-[4/6] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
+              <img src="639a6bc5427e9555a56979ce2d955074.jpg" alt="Archive 05" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Winter Horizon</div>
+              <div class="sm:col-span-8 text-neutral-600 space-y-3">
+                <p class="font-medium text-neutral-900 leading-snug">
+                  Photographic Studies<br>
+                  Nordic Art Foundation<br>
+                  1999
+                </p>
+                <p class="text-[11px] text-neutral-500 leading-normal">
+                  Exploration of northern hemisphere light temperatures and seasonal textures.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="flex flex-col space-y-3 pb-16">
+            <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 03</div>
+            <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
+              <img src="https://picsum.photos/seed/arch-right-3/1200/900" alt="Archive 06" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700">
+            </div>
+            <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
+              <div class="sm:col-span-4 font-semibold text-neutral-900">Retrospective Book</div>
+              <div class="sm:col-span-8 text-neutral-600">
+                <p class="font-medium text-neutral-900 leading-snug">Limited Edition Print (100 Copies)</p>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+
+      <!-- 아카이브 섹션 최상단 이동 버튼 -->
+      <button id="back-to-top" aria-label="최상단으로 이동" class="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/50 hover:bg-white/75 backdrop-blur-xl border border-white/60 text-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center justify-center opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:scale-110 hover:shadow-[0_6px_20px_rgba(0,0,0,0.1)] active:scale-95 group focus:outline-none">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:-translate-y-0.5 text-neutral-700 group-hover:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11l7-7m0 0l7 7m-7-7v16"></path>
         </svg>
       </button>
+    </section>
+
+    <!-- 랜딩 푸터 -->
+    <footer class="bg-black text-white py-16 sm:py-24 px-5 sm:px-12 border-t border-neutral-900">
+      <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-8 sm:space-y-12">
+        <span class="font-display text-5xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">YUNG</span>
+        <div class="flex flex-wrap justify-center gap-5 sm:gap-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400">
+          <a href="#" class="hover:text-white transition-colors">Instagram</a>
+          <a href="javascript:void(0)" onclick="navigateToStore()" class="hover:text-white transition-colors">Store</a>
+          <a href="#archive-split-section" class="hover:text-white transition-colors">Archive</a>
+          <a href="#archive-split-section" class="hover:text-white transition-colors">Exhibition</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors">Contact</a>
+        </div>
+        <p class="text-[11px] sm:text-xs text-neutral-600 font-normal tracking-widest pt-6 sm:pt-8 border-t border-neutral-900 w-full">© 2026 YUNG. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==========================================================================
+       [VIEW 2] 스토어 페이지
+       ========================================================================== -->
+  <div id="store-view">
+    <!-- 스토어 헤더 -->
+    <header class="yung-header" id="storeHeader">
+      <div class="header-center-group">
+        <button class="header-btn" id="storeHamburgerBtn" aria-label="메뉴 열기">
+          <div class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+
+        <!-- 랜딩페이지와 동일한 폰트/스타일 및 클릭 시 랜딩페이지 복귀 설정 -->
+        <div class="font-display text-2xl sm:text-3xl font-black tracking-[-0.07em] text-white hover:opacity-75 transition-opacity duration-200 cursor-pointer select-none" id="storeLogoBtn">
+          YUNG
+        </div>
+
+        <button class="header-btn" id="cartToggleBtn" aria-label="장바구니 열기">
+          <svg class="cart-bag-icon" viewBox="0 0 20 22" fill="none" stroke="currentColor">
+            <path d="M6.5 7V4.5C6.5 2.567 8.067 1 10 1C11.933 1 13.5 2.567 13.5 4.5V7" stroke-width="2" stroke-linecap="round"/>
+            <rect x="1.5" y="7" width="17" height="13.5" rx="0.5" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 햄버거 모달 -->
+    <div class="menu-modal" id="storeMenuModal">
+      <div class="swatch-grid" id="menuSwatches"></div>
+      <div class="menu-footer">
+        <div>
+          <div class="menu-footer-section">
+            <h4>YUNG Studio, Inc.</h4>
+            <p>Level 1, 11 Test Street,<br>Suburb, 4003, City<br>Monday open via appt.<br>Tuesday to Saturday 10am–5pm</p>
+          </div>
+          <div>
+            <h4>Home</h4>
+            <p><a href="javascript:void(0)" onclick="navigateToLanding()" style="text-decoration: underline; cursor: pointer;">Landing Page</a></p>
+          </div>
+        </div>
+        <div>
+          <div class="menu-footer-section">
+            <h4>Information</h4>
+            <p>Practice<br>Shipping & Returns<br>Terms & Privacy<br>FAQ</p>
+          </div>
+          <div>
+            <h4>Copyright</h4>
+            <p>© 2026 YUNG<br>All Rights Reserved<br>№ 874488A</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 드로어 메뉴 링크 -->
-    <nav class="flex flex-col space-y-5 my-auto py-6">
-      <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Archive</a>
-      <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Object</a>
-      <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Exhibition</a>
-      <a href="#" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">About</a>
-    </nav>
+    <!-- 카트 드로어 -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+      <button class="cart-close-btn" id="cartCloseBtn">✕</button>
+      <div class="cart-empty-message">Cart is empty</div>
+    </aside>
 
-    <!-- 드로어 하단 -->
-    <div class="flex justify-between items-center pt-5 border-t border-neutral-100 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-400">
-      <a href="#" class="hover:text-neutral-900 transition-colors">Instagram</a>
-      <span>© 2026 YUNG</span>
-    </div>
-  </aside>
+    <!-- 메인 카탈로그 뷰 -->
+    <main id="catalogView">
+      <section class="grid-row-2" id="mainRow1"></section>
+      <section class="grid-row-4" id="mainRow2"></section>
+      <section class="grid-row-4" id="mainRow3"></section>
 
-  <!-- 4. [메인 최상단 풀스크린 히어로 슬라이더] -->
-  <section class="w-full">
-    <div class="hero-block" data-slider>
-      <div class="hero-image-container">
-        <!-- 슬라이드 1: 비디오 (10초) -->
-        <div class="hero-bg-layer active">
-          <video autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="비디우.mp4" type="video/mp4" />
-          </video>
+      <footer class="site-footer-store">
+        <div>
+          <h4>YUNG Studio, Inc.</h4>
+          <p>Level 1, 11 Test Street,<br>Suburb, 4003, City<br>Monday open via appt.<br>Tuesday to Saturday 10am–5pm</p>
         </div>
-        <!-- 슬라이드 2: 비디오 (10초) -->
-        <div class="hero-bg-layer">
-          <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="비디우3.mp4" type="video/mp4" />
-          </video>
+        <div>
+          <h4>Information</h4>
+          <p>Practice<br>Shipping & Returns<br>Terms & Privacy<br>FAQ</p>
         </div>
-        <!-- 슬라이드 3: 비디오 (10초) -->
-        <div class="hero-bg-layer">
-          <video loop muted playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="비디우2.mp4" type="video/mp4" />
-          </video>
+        <div>
+          <h4>Inquiries</h4>
+          <p>Email<br>(718) 589-7272<br>Instagram<br>Careers</p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p>© 2026 YUNG<br>All Rights Reserved<br>№ 439024A</p>
+        </div>
+      </footer>
+    </main>
+
+    <!-- 상품 상세 뷰 (PDP) -->
+    <main id="productView" style="display: none;">
+      <section class="product-hero">
+        <div class="hero-image-wrap">
+          <img id="heroImage" src="" alt="메인 룩북">
+        </div>
+      </section>
+
+      <div class="product-action-bar">
+        <div class="bar-col-name" id="pdpName">ITEM 8950</div>
+        <div class="bar-col-details" id="scrollDetailsBtn">↓ Details</div>
+        <div class="bar-col-cart" id="addToCartAction">
+          <span>Add to Cart</span>
+          <span id="pdpPrice">$99</span>
         </div>
       </div>
 
-      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-[2] pointer-events-none"></div>
-
-      <!-- 슬라이드 인디케이터 (확장된 와이드 프로그레스 바) -->
-      <div class="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 sm:gap-4">
-        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="0">
-          <div class="progress-bar"></div>
+      <section class="detail-section" id="detailContent">
+        <div class="detail-row split-2">
+          <div class="detail-box">
+            <h4>Details</h4>
+          </div>
+          <div class="detail-box">
+            <ul>
+              <li>Integer et placerat est, eu imperdiet neque.</li>
+              <li>Proin sit amet purus metus. In nec efficitur justo, sed maximus est.</li>
+              <li>Ut ornare arcu eros, at condimentum enim imperdiet vitae.</li>
+              <li>Morbi lorem augue commodo vel ipsum ac.</li>
+              <li>Sollicitudin placerat urna.</li>
+              <li>Praesent sit amet mauris tortor.</li>
+              <li>Duis ac risus sem fusce.</li>
+            </ul>
+          </div>
         </div>
-        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="1">
-          <div class="progress-bar"></div>
+
+        <div class="detail-row split-3">
+          <div class="detail-box">
+            <h4>Images (3)</h4>
+            <div class="thumb-group">
+              <div class="thumb-item" id="thumbWrap0" onclick="switchHeroImage(0)"><img id="thumb0" src="" alt="컷 1"></div>
+              <div class="thumb-item" id="thumbWrap1" onclick="switchHeroImage(1)"><img id="thumb1" src="" alt="컷 2"></div>
+              <div class="thumb-item" id="thumbWrap2" onclick="switchHeroImage(2)"><img id="thumb2" src="" alt="컷 3"></div>
+            </div>
+          </div>
+
+          <div class="detail-box">
+            <h4>Description</h4>
+            <p style="color:#555;">
+              Praesent bibendum a elit non efficitur. Etiam et velit vitae quam aliquet fermentum. Quisque sit amet nulla dictum, cursus erat a, tempus est. Sed laoreet, magna eget mattis tincidunt, felis tellus vestibulum augue, in lobortis mauris risus eu nunc. Vivamus sed condimentum leo. Nunc efficitur, magna condimentum gravida egestas, ligula mauris posuere neque.
+            </p>
+          </div>
+
+          <div class="detail-box">
+            <div class="spec-block">
+              <h4>Measurements</h4>
+              <p style="color:#555;">Length: 50mm<br>Width: 50mm<br>Depth: 5mm</p>
+            </div>
+            <div class="spec-block">
+              <h4>Weight</h4>
+              <p style="color:#555;">Packaged: 500g<br>Unpackaged: 450g</p>
+            </div>
+          </div>
         </div>
-        <div class="slide-dot w-12 sm:w-24 md:w-28" data-index="2">
-          <div class="progress-bar"></div>
+
+        <div class="similar-row-header">
+          <span>Similar Products</span>
+          <span style="cursor: pointer; text-decoration: underline;" onclick="showCatalog()">View All</span>
         </div>
-      </div>
-    </div>
-  </section>
+        <div class="similar-grid" id="similarGrid"></div>
+      </section>
 
-  <!-- 5. [1:1 좌우 독립 분할 스크롤 아카이브 섹션] -->
-  <section id="archive-split-section" class="w-full h-[100dvh] bg-white text-black border-t border-neutral-200 overflow-hidden relative">
-    <div class="w-full h-full flex flex-col md:flex-row">
+      <footer class="site-footer-store">
+        <div>
+          <h4>YUNG Studio, Inc.</h4>
+          <p>Level 1, 11 Test Street,<br>Suburb, 4003, City<br>Monday open via appt.<br>Tuesday to Saturday 10am–5pm</p>
+        </div>
+        <div>
+          <h4>Information</h4>
+          <p>Practice<br>Shipping & Returns<br>Terms & Privacy<br>FAQ</p>
+        </div>
+        <div>
+          <h4>Inquiries</h4>
+          <p>Email<br>(718) 589-7272<br>Instagram<br>Careers</p>
+        </div>
+        <div>
+          <h4>Copyright</h4>
+          <p>© 2026 YUNG<br>All Rights Reserved<br>№ 439024A</p>
+        </div>
+      </footer>
+    </main>
+  </div>
 
-      <!-- 좌측 컬럼 -->
-      <div class="split-scroll-col w-full md:w-1/2 h-full overflow-y-auto p-4 sm:p-6 md:p-8 flex flex-col space-y-16 border-b md:border-b-0 md:border-r border-neutral-200">
-        
-        <article class="flex flex-col space-y-3">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01</div>
-          <div class="w-full aspect-[5/6] bg-[#b36329] relative overflow-hidden flex items-center justify-center">
-            <img src="스크린샷 2026-09-10 173342.png" alt="Archive 01" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
-            <div class="sm:col-span-8 text-neutral-600 space-y-3">
-              <p class="font-medium text-neutral-900 leading-snug">
-                Hamish Fulton, Nepal<br>
-                Exhibition Catalog<br>
-                Van Abbemuseum, Eindhoven<br>
-                1977
-              </p>
-              <p class="text-[11px] text-neutral-500 leading-normal">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col space-y-3">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 02</div>
-          <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-            <img src="a607d743-2389-4681-a003-0a283ea042ac.jpg" alt="Archive 02" class="w-full h-full object-cover contrast-125 group-hover:scale-105 transition-transform duration-700">
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Spatial Object 04</div>
-            <div class="sm:col-span-8 text-neutral-600 space-y-3">
-              <p class="font-medium text-neutral-900 leading-snug">
-                Architectural Monograph<br>
-                Berlin Archive Series<br>
-                1982
-              </p>
-              <p class="text-[11px] text-neutral-500 leading-normal">
-                Curated documentation of minimalist geometric objects and landscape interactions.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col space-y-3 pb-16">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 01 / Sub 03</div>
-          <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-            <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Edition Vercors</div>
-            <div class="sm:col-span-8 text-neutral-600">
-              <p class="font-medium text-neutral-900 leading-snug">Original Print Series / 1991</p>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-      <!-- 우측 컬럼 -->
-      <div class="split-scroll-col w-full md:w-1/2 h-full overflow-y-auto p-4 sm:p-6 md:p-8 flex flex-col space-y-16">
-        
-        <article class="flex flex-col space-y-3">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02</div>
-          <div class="w-full aspect-[5/6] relative overflow-hidden bg-neutral-900 border border-neutral-300/40 group">
-            <img src="f3e58f7e85ba2f17ed524f05d38c850e.jpg" alt="Mountain Walk" class="w-full h-full object-cover contrast-110 group-hover:scale-105 transition-transform duration-700">
-            <div class="absolute inset-y-0 left-2 sm:left-4 flex items-center pointer-events-none">
-              <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
-                A TEN DAY CIRCULAR WALK NOVEMBER FULL MOON VERCORS FRANCE 1993
-              </span>
-            </div>
-            <div class="absolute inset-y-0 right-2 sm:right-4 flex items-center pointer-events-none">
-              <span class="font-mono text-[9px] sm:text-[11px] text-white tracking-widest uppercase [writing-mode:vertical-rl] drop-shadow-md">
-                A TEN DAY CIRCULAR WALK DECEMBER FULL MOON VERCORS FRANCE 1995
-              </span>
-            </div>
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Project Name</div>
-            <div class="sm:col-span-8 text-neutral-600 space-y-3">
-              <p class="font-medium text-neutral-900 leading-snug">
-                Hamish Fulton<br>
-                Exhibition card<br>
-                Le Musée de Valence<br>
-                1996
-              </p>
-              <p class="text-[11px] text-neutral-500 leading-normal">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta ex a porta blandit. Suspendisse feugiat justo at mauris molestie molestie. Ut mattis urna sed sem pulvinar, vitae rutrum nulla ultrices.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col space-y-3">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 02</div>
-          <div class="w-full aspect-[4/6] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-            <img src="639a6bc5427e9555a56979ce2d955074.jpg" alt="Archive 05" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Winter Horizon</div>
-            <div class="sm:col-span-8 text-neutral-600 space-y-3">
-              <p class="font-medium text-neutral-900 leading-snug">
-                Photographic Studies<br>
-                Nordic Art Foundation<br>
-                1999
-              </p>
-              <p class="text-[11px] text-neutral-500 leading-normal">
-                Exploration of northern hemisphere light temperatures and seasonal textures.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <article class="flex flex-col space-y-3 pb-16">
-          <div class="font-mono-custom text-[11px] text-neutral-500 tracking-tight">Group 02 / Sub 03</div>
-          <div class="w-full aspect-[4/3] bg-neutral-100 overflow-hidden relative border border-neutral-200 group">
-            <img src="https://picsum.photos/seed/arch-right-3/1200/900" alt="Archive 06" class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700">
-          </div>
-          <div class="pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs leading-relaxed border-t border-neutral-100">
-            <div class="sm:col-span-4 font-semibold text-neutral-900">Retrospective Book</div>
-            <div class="sm:col-span-8 text-neutral-600">
-              <p class="font-medium text-neutral-900 leading-snug">Limited Edition Print (100 Copies)</p>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-    </div>
-
-    <!-- [아카이브 섹션 최하단 중앙: 프로스티드 글래스 최상단 이동 버튼] -->
-    <button id="back-to-top" aria-label="최상단으로 이동" class="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/50 hover:bg-white/75 backdrop-blur-xl border border-white/60 text-neutral-800 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center justify-center opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:scale-110 hover:shadow-[0_6px_20px_rgba(0,0,0,0.1)] active:scale-95 group focus:outline-none">
-      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:-translate-y-0.5 text-neutral-700 group-hover:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11l7-7m0 0l7 7m-7-7v16"></path>
-      </svg>
-    </button>
-  </section>
-
-  <!-- 6. [푸터 영역] -->
-  <footer class="bg-black text-white py-16 sm:py-24 px-5 sm:px-12 border-t border-neutral-900">
-    <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center space-y-8 sm:space-y-12">
-      <span class="font-display text-5xl sm:text-8xl md:text-9xl font-black tracking-[-0.08em] opacity-90 select-none">YUNG</span>
-      <div class="flex flex-wrap justify-center gap-5 sm:gap-8 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-neutral-400">
-        <a href="#" class="hover:text-white transition-colors">Instagram</a>
-        <a href="#archive-split-section" class="hover:text-white transition-colors">Archive</a>
-        <a href="#archive-split-section" class="hover:text-white transition-colors">Exhibition</a>
-        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
-        <a href="#" class="hover:text-white transition-colors">Contact</a>
-      </div>
-      <p class="text-[11px] sm:text-xs text-neutral-600 font-normal tracking-widest pt-6 sm:pt-8 border-t border-neutral-900 w-full">© 2026 YUNG. ALL RIGHTS RESERVED.</p>
-    </div>
-  </footer>
-
-  <!-- 7. [인터랙션 스크립트] -->
+  <!-- ==========================================================================
+       [JAVASCRIPT]
+       ========================================================================== -->
   <script>
-    // 1. 드로어 열기 / 닫기
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    /* --------------------------------------------------
+       [1] 뷰 전환 라우터 (Landing <-> Store)
+       -------------------------------------------------- */
+    const landingView = document.getElementById('landing-view');
+    const storeView = document.getElementById('store-view');
     const mobileDrawer = document.getElementById('mobile-drawer');
     const drawerBackdrop = document.getElementById('drawer-backdrop');
+
+    function navigateToStore() {
+      if (mobileDrawer) mobileDrawer.classList.remove('is-open');
+      if (drawerBackdrop) drawerBackdrop.classList.remove('is-open');
+      document.body.style.overflow = '';
+
+      document.querySelectorAll('.hero-bg-layer video').forEach(v => v.pause());
+
+      landingView.style.display = 'none';
+      storeView.style.display = 'block';
+      document.body.classList.remove('bg-[#0e0e0e]');
+      document.body.classList.add('bg-white');
+
+      showCatalog();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function navigateToLanding() {
+      storeView.style.display = 'none';
+      landingView.style.display = 'block';
+      document.body.classList.add('bg-[#0e0e0e]');
+      document.body.classList.remove('bg-white');
+
+      const activeVideo = document.querySelector('.hero-bg-layer.active video');
+      if (activeVideo) activeVideo.play().catch(() => {});
+
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    /* --------------------------------------------------
+       [2] 랜딩 페이지 스크립트
+       -------------------------------------------------- */
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
     const drawerLinks = document.querySelectorAll('.drawer-link');
 
     function openDrawer() { 
@@ -431,22 +793,21 @@
     if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
     drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
 
-    // 2. 스크롤 헤더 노출/숨김
-    const header = document.getElementById('main-header');
-    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const mainHeader = document.getElementById('main-header');
+    let lastLandingScrollY = window.pageYOffset || document.documentElement.scrollTop;
 
     window.addEventListener('scroll', () => {
+      if (landingView.style.display === 'none') return;
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const scrollDiff = lastScrollY - currentScrollY;
+      const scrollDiff = lastLandingScrollY - currentScrollY;
 
-      if (currentScrollY <= 15) header.classList.add('is-revealed');
-      else if (scrollDiff > 4) header.classList.add('is-revealed');
-      else if (scrollDiff < -4) header.classList.remove('is-revealed');
+      if (currentScrollY <= 15) mainHeader.classList.add('is-revealed');
+      else if (scrollDiff > 4) mainHeader.classList.add('is-revealed');
+      else if (scrollDiff < -4) mainHeader.classList.remove('is-revealed');
 
-      lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+      lastLandingScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
     }, { passive: true });
 
-    // 3. 아카이브 섹션 최하단 도달 감지 및 최상단 이동 로직
     const backToTopBtn = document.getElementById('back-to-top');
     const splitCols = document.querySelectorAll('.split-scroll-col');
 
@@ -481,7 +842,6 @@
       });
     }
 
-    // 4. 풀스크린 히어로 슬라이더 (10초 비디오 + 도트 게이지)
     document.querySelectorAll('.hero-block[data-slider]').forEach((block) => {
       const layers = block.querySelectorAll('.hero-bg-layer');
       const dots = block.querySelectorAll('.slide-dot');
@@ -536,7 +896,10 @@
       startProgress(0);
       resetTimer();
 
-      block.addEventListener('click', () => { next(); });
+      block.addEventListener('click', (e) => { 
+        if (e.target.closest('.slide-dot')) return;
+        next(); 
+      });
 
       dots.forEach((dot, index) => {
         dot.addEventListener('click', (e) => { 
@@ -555,6 +918,168 @@
           else prev(); 
         }
       }, { passive: true });
+    });
+
+    /* --------------------------------------------------
+       [3] 스토어 페이지 스크립트
+       -------------------------------------------------- */
+    const storeHeader = document.getElementById('storeHeader');
+    const storeMenuModal = document.getElementById('storeMenuModal');
+    let lastStoreScrollY = 0;
+
+    window.addEventListener('scroll', () => {
+      if (storeView.style.display !== 'block') return;
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (currentScrollY <= 15) {
+        storeHeader.classList.remove('nav-hidden');
+      } 
+      else if (currentScrollY > lastStoreScrollY && currentScrollY > 50) {
+        storeHeader.classList.add('nav-hidden');
+        storeMenuModal.classList.remove('active');
+      } 
+      else if (currentScrollY < lastStoreScrollY) {
+        storeHeader.classList.remove('nav-hidden');
+      }
+
+      lastStoreScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+    }, { passive: true });
+
+    const PRODUCTS = [
+      { id: 1, name: 'ITEM 8950', price: '$99', gallery: ['자켓누끼4.webp', '자켓누끼4.webp', '자켓누끼4.webp'] },
+      { id: 2, name: 'ITEM 5329', price: '$99', gallery: ['자켓누끼2.webp', '자켓누끼2.webp', '자켓누끼2.webp'] },
+      { id: 3, name: 'ITEM 2950.A', price: '$99', gallery: ['자켓누끼1.webp', '자켓누끼1.webp', '자켓누끼1.webp'] },
+      { id: 4, name: 'ITEM 2950.B', price: '$99', gallery: ['자켓누끼5.webp', '자켓누끼5.webp', '자켓누끼5.webp'] },
+      { id: 5, name: 'ITEM 4832.A', price: '$75', oldPrice: '$99', gallery: ['가방누끼1.webp', '가방누끼1.webp', '가방누끼1.webp'] },
+      { id: 6, name: 'ITEM 4832.B', price: '$99', gallery: ['구두누끼1.webp', '구두누끼1.webp', '구두누끼1.webp'] },
+      { id: 7, name: 'ITEM 1937.B', price: '$99', gallery: ['자켓누끼5.webp', '자켓누끼5.webp', '자켓누끼5.webp'] },
+      { id: 8, name: 'ITEM 3104.B', price: '$99', gallery: ['자켓누끼6.webp', '자켓누끼6.webp', '자켓누끼6.webp'] },
+      { id: 9, name: 'ITEM 3104.C', price: '$99', gallery: ['악세누끼1.webp', '악세누끼1.webp', '악세누끼1.webp'] },
+      { id: 10, name: 'ITEM 1937.C', price: '$99', gallery: ['벨트누끼1.webp', '벨트누끼1.webp', '벨트누끼1.webp'] }
+    ];
+
+    function renderProductCard(p) {
+      return `
+        <div class="grid-card" onclick="openProductDetail(${p.id})">
+          <div class="image-wrap">
+            <img src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="card-meta">
+            <div class="meta-name">${p.name}</div>
+            <div class="meta-price">
+              ${p.oldPrice ? `<span class="original-price">${p.oldPrice}</span>` : ''}
+              ${p.price}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('mainRow1').innerHTML = PRODUCTS.slice(0, 2).map(renderProductCard).join('');
+    document.getElementById('mainRow2').innerHTML = PRODUCTS.slice(2, 6).map(renderProductCard).join('');
+    document.getElementById('mainRow3').innerHTML = PRODUCTS.slice(6, 10).map(renderProductCard).join('');
+
+    const swatchContainer = document.getElementById('menuSwatches');
+    for (let i = 0; i < 16; i++) {
+      const product = PRODUCTS[i % PRODUCTS.length];
+      const el = document.createElement('div');
+      el.className = 'swatch-item';
+      el.innerHTML = `<img src="${product.gallery[0]}" alt="${product.name}">`;
+      el.onclick = () => {
+        toggleStoreMenu(false);
+        openProductDetail(product.id);
+      };
+      swatchContainer.appendChild(el);
+    }
+
+    const catalogView = document.getElementById('catalogView');
+    const productView = document.getElementById('productView');
+    let currentActiveProduct = null;
+
+    function showCatalog() {
+      productView.style.display = 'none';
+      catalogView.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function openProductDetail(productId) {
+      const product = PRODUCTS.find(item => item.id === productId) || PRODUCTS[0];
+      currentActiveProduct = product;
+
+      catalogView.style.display = 'none';
+      productView.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      document.getElementById('pdpName').textContent = product.name;
+      document.getElementById('pdpPrice').textContent = product.price;
+
+      document.getElementById('thumb0').src = product.gallery[0];
+      document.getElementById('thumb1').src = product.gallery[1];
+      document.getElementById('thumb2').src = product.gallery[2];
+
+      switchHeroImage(0);
+
+      const similarItems = PRODUCTS.filter(item => item.id !== product.id).slice(0, 3);
+      document.getElementById('similarGrid').innerHTML = similarItems.map(item => `
+        <div class="similar-item" onclick="openProductDetail(${item.id})">
+          <div class="image-wrap">
+            <img src="${item.gallery[0]}" alt="${item.name}">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchHeroImage(index) {
+      if (!currentActiveProduct || !currentActiveProduct.gallery[index]) return;
+      document.getElementById('heroImage').src = currentActiveProduct.gallery[index];
+      for (let i = 0; i < 3; i++) {
+        const wrap = document.getElementById(`thumbWrap${i}`);
+        if (wrap) {
+          wrap.classList.toggle('active-thumb', i === index);
+        }
+      }
+    }
+
+    // 스토어 로고 클릭 시 랜딩페이지로 복귀
+    document.getElementById('storeLogoBtn').addEventListener('click', navigateToLanding);
+
+    const storeHamburgerBtn = document.getElementById('storeHamburgerBtn');
+    function toggleStoreMenu(force) {
+      const isActive = force !== undefined ? force : !storeMenuModal.classList.contains('active');
+      storeMenuModal.classList.toggle('active', isActive);
+    }
+
+    storeHamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleStoreMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!storeMenuModal.contains(e.target) && !storeHamburgerBtn.contains(e.target)) {
+        toggleStoreMenu(false);
+      }
+    });
+
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartToggleBtn = document.getElementById('cartToggleBtn');
+    const cartCloseBtn = document.getElementById('cartCloseBtn');
+
+    function toggleCart(open) {
+      cartOverlay.classList.toggle('active', open);
+      cartDrawer.classList.toggle('active', open);
+    }
+
+    cartToggleBtn.addEventListener('click', () => toggleCart(true));
+    cartCloseBtn.addEventListener('click', () => toggleCart(false));
+    cartOverlay.addEventListener('click', () => toggleCart(false));
+
+    document.getElementById('scrollDetailsBtn').addEventListener('click', () => {
+      document.getElementById('detailContent').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('addToCartAction').addEventListener('click', () => {
+      toggleCart(true);
     });
   </script>
 </body>
