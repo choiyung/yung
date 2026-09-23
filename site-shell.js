@@ -24,7 +24,7 @@ root.innerHTML=`
 <aside class="yung-shell-overlay" id="menuPanel" aria-hidden="true">
   <button class="yung-shell-close" type="button" aria-label="닫기">×</button>
   <nav class="yung-shell-menu-links">
-    <a href="./index.html?view=store">Store</a>
+    <a href="${page==="landing"?"#":"./index.html?view=store"}" data-shell-route="store">Store</a>
     <a href="${page==="archive"?"#":"./archive.html"}" data-shell-route="archive">Archive</a>
     <a href="./index.html#archive-split-section">Exhibition</a>
     <a href="./index.html#credits-contact">About</a>
@@ -55,6 +55,7 @@ root.querySelectorAll("[data-shell-open]").forEach(b=>b.addEventListener("click"
 root.querySelectorAll(".yung-shell-close").forEach(b=>b.addEventListener("click",()=>closeAll()));
 document.addEventListener("keydown",e=>{const panel=root.querySelector(".yung-shell-overlay.is-open");if(!panel)return;if(e.key==="Escape"){closeAll();return}if(e.key==="Tab"){const nodes=[...panel.querySelectorAll("button,a,input")].filter(x=>!x.disabled),first=nodes[0],last=nodes.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 root.querySelectorAll("[data-shell-route=archive]").forEach(a=>a.addEventListener("click",e=>{if(page==="archive"){e.preventDefault();closeAll(false);document.dispatchEvent(new CustomEvent("yung:archive-index"))}}));
+root.querySelectorAll("[data-shell-route=store]").forEach(a=>a.addEventListener("click",e=>{if(page==="landing"){e.preventDefault();closeAll(false);document.dispatchEvent(new CustomEvent("yung:store"))}}));
 const form=root.querySelector("#yungShellSearchForm"),input=root.querySelector("#siteSearch");
 input.addEventListener("input",()=>{if(page==="archive")document.dispatchEvent(new CustomEvent("yung:search-input",{detail:{query:input.value}}))});
 form.addEventListener("submit",e=>{e.preventDefault();const q=input.value.trim();if(page==="archive"){document.dispatchEvent(new CustomEvent("yung:search-submit",{detail:{query:q}}));closeAll(false)}else{location.href="./archive.html"+(q?"?search="+encodeURIComponent(q):"")}});
