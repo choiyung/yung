@@ -522,7 +522,7 @@
       .cart-drawer { width: 85vw; }
     }
   </style>
-  <link rel="stylesheet" href="./site-shell.css">
+  <link rel="stylesheet" href="./site-shell.css?v=20260924-2">
   <link rel="shortcut icon" type="image" href="로고.png">
 </head>
 <body class="bg-[#0e0e0e] text-neutral-900 antialiased selection:bg-white selection:text-black">
@@ -963,9 +963,9 @@
   <!-- ==========================================================================
        [JAVASCRIPT]
        ========================================================================== -->
-  <script src="./archive-data.js"></script>
-  <script src="./landing-archive.js"></script>
-  <script src="./site-shell.js"></script>
+  <script src="./archive-data.js?v=20260924-2"></script>
+  <script src="./landing-archive.js?v=20260924-2"></script>
+  <script src="./site-shell.js?v=20260924-2"></script>
 
   <script>
     /* --------------------------------------------------
@@ -1002,6 +1002,7 @@
       if (activeVideo) activeVideo.play().catch(() => {});
 
       window.scrollTo({ top: 0, behavior: 'instant' });
+      document.dispatchEvent(new CustomEvent('yung:landing-top'));
     }
 
     document.addEventListener('yung:store', navigateToStore);
