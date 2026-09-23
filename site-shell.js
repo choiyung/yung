@@ -5,7 +5,7 @@ root.innerHTML=`
 <header class="yung-shell-header" id="main-header">
   <div class="yung-shell-left">
     <button class="yung-shell-icon" id="hamburger-btn" data-shell-open="menuPanel" aria-label="메뉴 열기">
-      <span class="yung-shell-hamburger" aria-hidden="true"><span></span><span></span><span></span></span>
+      <svg style="width:24px;height:24px" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 7.5h16.5M3.75 12h16.5m-16.5 4.5h16.5"/></svg>
     </button>
   </div>
   <a class="yung-shell-logo" id="mainLogo" href="./index.html">YUNG</a>
@@ -17,7 +17,7 @@ root.innerHTML=`
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke-width="1.8"/><path d="M4.5 20c1.5-4 4.5-6 7.5-6s6 2 7.5 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <button class="yung-shell-icon" data-shell-open="cartPanel" aria-label="장바구니">
-      <svg class="yung-shell-cart" viewBox="0 0 20 22" fill="none" stroke="currentColor" aria-hidden="true"><path d="M6.5 7V4.5C6.5 2.567 8.067 1 10 1C11.933 1 13.5 2.567 13.5 4.5V7" stroke-width="2" stroke-linecap="round"/><rect x="1.5" y="7" width="17" height="13.5" rx=".5" stroke-width="2"/></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="17.5" cy="20.5" r="1.3" fill="currentColor" stroke="none"/></svg>
     </button>
   </div>
 </header>
