@@ -1,9 +1,14 @@
 window.FRAME_PRESETS = {
-  fullscreen:{bleed:true,desktopWidth:"100vw",desktopMaxHeight:"100dvh",mobileHeight:"64dvh",mobileMaxWidth:"100vw",mobileRatio:"1 / 1",mobileFit:"crop"},
-  portrait:{desktopWidth:"40vw",desktopMaxHeight:"87dvh",mobileHeight:"70dvh",mobileMaxWidth:"88vw"},
-  portraitLarge:{desktopWidth:"48vw",desktopMaxHeight:"84dvh",mobileHeight:"72dvh",mobileMaxWidth:"92vw"},
-  square:{desktopWidth:"43vw",desktopMaxHeight:"80dvh",mobileHeight:"62dvh",mobileMaxWidth:"90vw"},
-  wide:{desktopWidth:"52vw",desktopMaxHeight:"83dvh",mobileHeight:"64dvh",mobileMaxWidth:"96vw"}
+  fullscreen:{bleed:true,objectPosition:"center 48%",mobileHeight:"64dvh",mobileMaxWidth:"100vw",mobileRatio:"1 / 1",mobileFit:"crop",mobileObjectPosition:"center"},
+  tall:{desktopWidth:"42vw",desktopMaxHeight:"90dvh",mobileHeight:"76dvh",mobileRatio:"3 / 4",mobileObjectPosition:"center"},
+  compact:{desktopWidth:"38vw",desktopMaxHeight:"82dvh",mobileHeight:"66dvh",mobileRatio:"4 / 5",mobileObjectPosition:"center"},
+  square:{desktopWidth:"43vw",desktopMaxHeight:"80dvh",mobileHeight:"58dvh",mobileRatio:"1 / 1",mobileObjectPosition:"center"},
+  large:{desktopWidth:"50vw",desktopMaxHeight:"86dvh",mobileHeight:"80dvh",mobileRatio:"3 / 4",mobileObjectPosition:"center"},
+  portrait:{desktopWidth:"40vw",desktopMaxHeight:"87dvh",mobileHeight:"70dvh",mobileRatio:"4 / 5",mobileObjectPosition:"center"},
+  wide:{desktopWidth:"52vw",desktopMaxHeight:"83dvh",mobileHeight:"78dvh",mobileRatio:"3 / 4",mobileObjectPosition:"center"},
+  squareSmall:{desktopWidth:"34vw",desktopMaxHeight:"70dvh",mobileHeight:"54dvh",mobileRatio:"1 / 1",mobileObjectPosition:"center"},
+  portraitLarge:{desktopWidth:"48vw",desktopMaxHeight:"84dvh",mobileHeight:"72dvh",mobileRatio:"4 / 5",mobileObjectPosition:"center"},
+  portraitTall:{desktopWidth:"44vw",desktopMaxHeight:"82dvh",mobileHeight:"75dvh",mobileRatio:"3 / 4",mobileObjectPosition:"center"}
 };
 
 window.ARCHIVE_ENTRIES = [
