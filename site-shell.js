@@ -59,6 +59,19 @@ root.querySelectorAll("[data-shell-route=store]").forEach(a=>a.addEventListener(
 const form=root.querySelector("#yungShellSearchForm"),input=root.querySelector("#siteSearch");
 input.addEventListener("input",()=>{if(page==="archive")document.dispatchEvent(new CustomEvent("yung:search-input",{detail:{query:input.value}}))});
 form.addEventListener("submit",e=>{e.preventDefault();const q=input.value.trim();if(page==="archive"){document.dispatchEvent(new CustomEvent("yung:search-submit",{detail:{query:q}}));closeAll(false)}else{location.href="./archive.html"+(q?"?search="+encodeURIComponent(q):"")}});
+if(page==="landing"){
+  const header=root.querySelector(".yung-shell-header");
+  let lastY=window.pageYOffset||document.documentElement.scrollTop||0;
+  const syncHeader=()=>{
+    const y=window.pageYOffset||document.documentElement.scrollTop||0;
+    if(y<=15) header.classList.remove("nav-hidden");
+    else if(y>lastY&&y>50) header.classList.add("nav-hidden");
+    else if(y<lastY) header.classList.remove("nav-hidden");
+    lastY=Math.max(0,y);
+  };
+  window.addEventListener("scroll",syncHeader,{passive:true});
+  document.addEventListener("yung:landing-top",()=>{header.classList.remove("nav-hidden");lastY=0});
+}
 document.addEventListener("yung:shell-close",()=>closeAll(false));
 document.dispatchEvent(new CustomEvent("yung:shell-ready"));
 })();
