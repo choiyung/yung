@@ -1,6 +1,7 @@
 (()=>{"use strict";
 const viewport=document.querySelector("#viewport"),rail=document.querySelector("#rail"),panel=document.querySelector("#indexPanel");
 const mobile=matchMedia("(max-width:800px)"),layout=window.YungArchiveLayout,entries=window.ARCHIVE_ENTRIES||[];
+const latestEntry=[...entries].filter(e=>!e.demo).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))[0]||entries[0]||null;
 const MOTION={initialPause:350,dragResumeDelay:80,wheelResumeDelay:160,keyResumeDelay:140,desktopAutoSpeed:.62,mobileAutoSpeed:.46,momentumFriction:.88};
 let mode="index",activeId=null,visible=entries,offset=0,width=0,count=0,last=0,paused=true,drag=false,point=0,velocity=0,pauseUntil=0,current=[];
 const $=s=>document.querySelector(s);
@@ -25,11 +26,12 @@ function filter(){const q=$("#siteSearch").value.trim().toLowerCase();visible=en
 $("#indexBtn").onclick=()=>changeMode("index");$("#viewBtn").onclick=()=>{if(!activeId&&entries[0])selectEntry(entries[0].id,false);changeMode("view")};$("#siteSearch").oninput=filter;
 
 document.addEventListener("yung:archive-index",()=>changeMode("index"));
+document.addEventListener("yung:archive-latest",()=>{if(latestEntry)selectEntry(latestEntry.id,true)});
 document.addEventListener("yung:search-input",e=>{const input=$("#siteSearch");if(input){input.value=e.detail?.query||"";filter()}});
 document.addEventListener("yung:search-submit",e=>{const input=$("#siteSearch");if(input){input.value=e.detail?.query||"";filter();changeMode("index")}});
 $("#siteSearch").placeholder="Search records";
 const params=new URLSearchParams(location.search);const searchParam=params.get("search");if(searchParam)$("#siteSearch").value=searchParam;
 filter();
 const target=params.get("record");
-if(target&&entries.some(e=>e.id===target)){selectEntry(target,true)}else{activeId=entries[0]?.id||null;if(activeId)setFrames(entries[0].frames);changeMode("index")}
+if(searchParam){changeMode("index")}else if(target&&entries.some(e=>e.id===target)){selectEntry(target,true)}else if(latestEntry){selectEntry(latestEntry.id,true)}else{changeMode("index")}
 })();
