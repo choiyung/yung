@@ -1,0 +1,25 @@
+(()=>{"use strict";
+const list=document.getElementById("landingArchiveList");
+if(!list||!window.ARCHIVE_ENTRIES)return;
+const entries=ARCHIVE_ENTRIES.filter(e=>e.landing?.show).sort((a,b)=>(a.landing?.order||999)-(b.landing?.order||999));
+list.replaceChildren(...entries.map((entry,i)=>{
+ const article=document.createElement("article");
+ if(i===entries.length-1)article.className="pb-0 md:pb-16";
+ const label=document.createElement("div");
+ label.className="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2";
+ label.textContent=i===0?"Archive":`Archive / ${String(i+1).padStart(2,"0")}`;
+ const link=document.createElement("a");
+ link.href=`./archive.html?record=${encodeURIComponent(entry.id)}`;
+ link.className="block group";
+ link.setAttribute("aria-label",`${entry.title} 아카이브 보기`);
+ const box=document.createElement("div");
+ box.className="archive-thumb-box ratio-5-6 border border-neutral-200";
+ const img=document.createElement("img");
+ img.src=entry.landing?.image||entry.cover;img.alt=entry.title;img.loading="lazy";
+ box.append(img);
+ const meta=document.createElement("div");
+ meta.className="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2";
+ meta.innerHTML=`<div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">${entry.title}</div><div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs"><p class="font-medium text-neutral-800">${entry.description}</p></div>`;
+ link.append(box,meta);article.append(label,link);return article;
+}));
+})();

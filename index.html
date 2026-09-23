@@ -593,7 +593,7 @@
 
       <nav class="flex flex-col space-y-5 my-auto py-6">
         <a href="javascript:void(0)" onclick="navigateToStore()" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Store</a>
-        <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Archive</a>
+        <a href="./archive.html" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Archive</a>
         <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Object</a>
         <a href="#archive-split-section" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">Exhibition</a>
         <a href="#" class="drawer-link text-base sm:text-lg font-semibold uppercase tracking-[0.18em] text-neutral-700 hover:text-black hover:translate-x-1 transition-all duration-200">About</a>
@@ -646,54 +646,15 @@
     <section id="archive-split-section" class="w-full text-black">
       <div class="w-full h-full flex flex-col md:flex-row">
 
-        <!-- [TOP / LEFT TRACK] Group 01 -->
+        <!-- [TOP / LEFT TRACK] Archive — rendered from archive-data.js -->
         <div class="mobile-track-container">
           <div class="mobile-track-header">
-            <span class="font-mono-custom text-[11px] text-neutral-500 uppercase tracking-wider">Group 01</span>
-            <span class="text-[10px] font-mono-custom text-neutral-400 tracking-widest">SWIPE ➔</span>
+            <span class="font-mono-custom text-[11px] text-neutral-500 uppercase tracking-wider">Archive</span>
+            <a href="./archive.html" class="text-[10px] font-mono-custom text-neutral-400 tracking-widest hover:text-black transition-colors">VIEW ALL ➔</a>
           </div>
 
-          <div class="split-scroll-col is-locked">
-            
-            <article>
-              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01</div>
-              <div class="archive-thumb-box ratio-5-6 bg-[#b36329]">
-                <img src="스크린샷 2026-09-10 173342.png" alt="Archive 01" class="contrast-125">
-              </div>
-              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
-                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Hamish Fulton, Nepal</div>
-                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
-                  <p class="font-medium text-neutral-800">Exhibition Catalog / 1977</p>
-                </div>
-              </div>
-            </article>
-
-            <article>
-              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01 / Sub 02</div>
-              <div class="archive-thumb-box ratio-4-3 border border-neutral-200">
-                <img src="a607d743-2389-4681-a003-0a283ea042ac.jpg" alt="Archive 02" class="contrast-125">
-              </div>
-              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
-                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Spatial Object 04</div>
-                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
-                  <p class="font-medium text-neutral-800">Berlin Archive Series / 1982</p>
-                </div>
-              </div>
-            </article>
-
-            <article class="pb-0 md:pb-16">
-              <div class="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2">Group 01 / Sub 03</div>
-              <div class="archive-thumb-box ratio-4-3 border border-neutral-200">
-                <img src="e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg" alt="Archive 03">
-              </div>
-              <div class="pt-2 md:pt-3 grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-3 text-xs leading-relaxed border-t border-neutral-100 mt-2">
-                <div class="md:col-span-4 font-semibold text-neutral-900 text-[11px] md:text-xs">Edition Vercors</div>
-                <div class="md:col-span-8 text-neutral-600 text-[10.5px] md:text-xs">
-                  <p class="font-medium text-neutral-800">Original Print Series / 1991</p>
-                </div>
-              </div>
-            </article>
-
+          <div class="split-scroll-col is-locked" id="landingArchiveList">
+            <!-- landing-archive.js inserts selected archive records here -->
           </div>
         </div>
 
@@ -1068,6 +1029,9 @@
   <!-- ==========================================================================
        [JAVASCRIPT]
        ========================================================================== -->
+  <script src="./archive-data.js"></script>
+  <script src="./landing-archive.js"></script>
+
   <script>
     /* --------------------------------------------------
        [1] 뷰 전환 라우터 (Landing <-> Store)
