@@ -9,7 +9,7 @@ list.replaceChildren(...entries.map((entry,i)=>{
  label.className="hidden md:block font-mono-custom text-[11px] text-neutral-500 tracking-tight mb-2";
  label.textContent=i===0?"Archive":`Archive / ${String(i+1).padStart(2,"0")}`;
  const link=document.createElement("a");
- link.href=`./archive.html?record=${encodeURIComponent(entry.id)}`;
+ link.href="./archive.html?latest=1";
  link.className="block group";
  link.setAttribute("aria-label",`${entry.title} 아카이브 보기`);
  const box=document.createElement("div");
