@@ -73,5 +73,35 @@ window.ARCHIVE_ENTRIES = [
     frames:[
       {image:"./639a6bc5427e9555a56979ce2d955074.jpg",alt:"Winter Horizon",frame:"portrait"}
     ]
+  },
+  {
+    id:"scroll-test-01",date:"1998-11-01",title:"Archive Scroll Test / 01",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./스크린샷 2026-09-10 173342.png",frames:[{image:"./스크린샷 2026-09-10 173342.png",alt:"Scroll test 01",frame:"portraitLarge"}]
+  },
+  {
+    id:"scroll-test-02",date:"1998-10-01",title:"Archive Scroll Test / 02",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./a607d743-2389-4681-a003-0a283ea042ac.jpg",frames:[{image:"./a607d743-2389-4681-a003-0a283ea042ac.jpg",alt:"Scroll test 02",frame:"wide"}]
+  },
+  {
+    id:"scroll-test-03",date:"1998-09-01",title:"Archive Scroll Test / 03",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg",frames:[{image:"./e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg",alt:"Scroll test 03",frame:"wide"}]
+  },
+  {
+    id:"scroll-test-04",date:"1998-08-01",title:"Archive Scroll Test / 04",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./f3e58f7e85ba2f17ed524f05d38c850e.jpg",frames:[{image:"./f3e58f7e85ba2f17ed524f05d38c850e.jpg",alt:"Scroll test 04",frame:"portraitLarge"}]
+  },
+  {
+    id:"scroll-test-05",date:"1998-07-01",title:"Archive Scroll Test / 05",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./639a6bc5427e9555a56979ce2d955074.jpg",frames:[{image:"./639a6bc5427e9555a56979ce2d955074.jpg",alt:"Scroll test 05",frame:"portrait"}]
+  },
+  {
+    id:"scroll-test-06",date:"1998-06-01",title:"Archive Scroll Test / 06",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./스크린샷 2026-09-10 173342.png",frames:[{image:"./스크린샷 2026-09-10 173342.png",alt:"Scroll test 06",frame:"portraitLarge"}]
+  },
+  {
+    id:"scroll-test-07",date:"1998-05-01",title:"Archive Scroll Test / 07",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./a607d743-2389-4681-a003-0a283ea042ac.jpg",frames:[{image:"./a607d743-2389-4681-a003-0a283ea042ac.jpg",alt:"Scroll test 07",frame:"wide"}]
+  },
+  {
+    id:"scroll-test-08",date:"1998-04-01",title:"Archive Scroll Test / 08",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg",frames:[{image:"./e0dc8bc0-86a5-4ab2-b70d-4a70de870af7123.jpg",alt:"Scroll test 08",frame:"wide"}]
+  },
+  {
+    id:"scroll-test-09",date:"1998-03-01",title:"Archive Scroll Test / 09",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./f3e58f7e85ba2f17ed524f05d38c850e.jpg",frames:[{image:"./f3e58f7e85ba2f17ed524f05d38c850e.jpg",alt:"Scroll test 09",frame:"portraitLarge"}]
+  },
+  {
+    id:"scroll-test-10",date:"1998-02-01",title:"Archive Scroll Test / 10",description:"Temporary index scroll response sample.",project:"Index Test",type:"Reference",demo:true,landing:{show:false},cover:"./639a6bc5427e9555a56979ce2d955074.jpg",frames:[{image:"./639a6bc5427e9555a56979ce2d955074.jpg",alt:"Scroll test 10",frame:"portrait"}]
   }
 ];
